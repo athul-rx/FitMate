@@ -1,4 +1,4 @@
-import 'package:fitmate/Screens/Login.dart';
+import 'package:fitmate/Screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: MediaQuery.of(context).size.height/2,
               ),
               const SizedBox(height: 20),
-              const Button(text: "START YOUR JOURNEY",route:Login()),
+              const Button(text: "START YOUR JOURNEY",route: LoginScreen(),),
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () {
