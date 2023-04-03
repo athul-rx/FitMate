@@ -1,4 +1,8 @@
+import 'package:fitmate/Screens/Login.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../Components/button.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -35,8 +39,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: MediaQuery.of(context).size.height/2,
               ),
               const SizedBox(height: 20),
-            
-            ],
+              const Button(text: "START YOUR JOURNEY",route:Login()),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                 
+                },
+                child:Text(
+                  "ALREADY HAVE AN ACCOUNT? LOGIN",
+                   style: GoogleFonts.archivo(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    decoration: TextDecoration.underline,
+                ),
+              ),
+              )]
           ),
         ),
     
