@@ -1,5 +1,6 @@
 
 import 'package:fitmate/Screens/login_screen.dart';
+import 'package:fitmate/Screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
         )
 
       ),
-      home: const LoginScreen(),
+      home: const SignupScreen(),
     );
   }
 }
