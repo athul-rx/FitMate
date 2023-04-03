@@ -1,5 +1,6 @@
-import 'package:fitmate/Screens/home_screen.dart';
+import 'package:fitmate/Screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,10 +17,26 @@ class MyApp extends StatelessWidget {
       title: 'Fitmate',
       theme: ThemeData(
        
-        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue).copyWith(background: Colors.black)
+        textTheme: TextTheme(
+          displayLarge: GoogleFonts.archivo(
+            fontSize: 72.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.white
+          ),
+          titleLarge: GoogleFonts.archivo(
+            fontSize: 36.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.white
+          ),
+          bodyMedium: GoogleFonts.archivo(
+            fontSize: 14.0,
+            fontWeight: FontWeight.normal,
+            color: Colors.white
+          ),
+        )
 
       ),
-      home: const HomeScreen(),
+      home: const Login(),
     );
   }
 }
