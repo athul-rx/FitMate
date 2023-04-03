@@ -1,6 +1,8 @@
+import 'package:fitmate/Components/button.dart';
 import 'package:fitmate/widgets/TextField.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sign_button/sign_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Container(
         width: double.infinity,
         height: MediaQuery.of(context).size.height,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('images/background.png'),
@@ -34,9 +36,9 @@ class _LoginScreenState extends State<LoginScreen> {
               width: MediaQuery.of(context).size.width / 1.4,
               height: MediaQuery.of(context).size.height / 4,
             ),
-            SizedBox(
+            Container(
               width: double.infinity,
-              height: MediaQuery.of(context).size.height / 2,
+              height: MediaQuery.of(context).size.height / 1.7,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -47,12 +49,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontSize: 30,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 40),
                   textField('Email', false, emailController),
                   textField('Password', true, passwordController),
                   Row(children: <Widget>[
                     Expanded(
-                      child:  Container(
+                      child: Container(
                           margin:
                               const EdgeInsets.only(left: 10.0, right: 15.0),
                           child: const Divider(
@@ -71,6 +73,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           )),
                     ),
                   ]),
+                  SignInButton(
+                      buttonType: ButtonType.google,
+                      width: double.infinity,
+                      buttonSize: ButtonSize.large,
+                      shape: ShapeBorder.lerp(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          1),
+                      onPressed: () {}),
+                  const Button(text: "Login", route: LoginScreen()),
                   const Text(
                     'Forgot Password?',
                     style: TextStyle(

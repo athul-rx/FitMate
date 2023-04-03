@@ -14,35 +14,43 @@ class Button extends StatefulWidget {
 class _ButtonState extends State<Button> {
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      minWidth: double.infinity,
-      height: 50,
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => widget.route));
-      },
-      color: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            widget.text,
-            
-            style: GoogleFonts.archivo(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height / 17,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => widget.route));
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              widget.text,
+              
+              style: GoogleFonts.archivo(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          const SizedBox(width: 15),
-          const Icon(
-            Icons.arrow_forward,
-            color: Colors.black,
-            size: 16,
-          ),
-        ],
+            const SizedBox(width: 15),
+            const Icon(
+              Icons.arrow_forward,
+              color: Colors.black,
+              size: 16,
+            ),
+          ],
+        ),
       ),
     );
   }
