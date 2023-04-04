@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 
 class BarChartWidget extends StatefulWidget {
-
-  const BarChartWidget({Key? key}) : super(key: key);
+  
+  bool showtitle = false;
+  BarChartWidget({Key? key, required this.showtitle }) : super(key: key);
 
   @override
   State<BarChartWidget> createState() => _BarChartWidgetState();
@@ -61,27 +62,27 @@ class _BarChartWidgetState extends State<BarChartWidget> {
   }
 
   SideTitles get _bottomTitles => SideTitles(
-    showTitles: false,
+    showTitles: widget.showtitle,
     getTitlesWidget: (value, meta) {
       String text = '';
       switch (value.toInt()) {
         case 0:
-          text = 'Jan';
+          text = '12\nam';
           break;
         case 2:
-          text = 'Mar';
+          text = '';
           break;
         case 4:
-          text = 'May';
+          text = '12\npm';
           break;
         case 6:
-          text = 'Jul';
+          text = '';
           break;
         case 8:
-          text = 'Sep';
+          text = '';
           break;
         case 10:
-          text = 'Nov';
+          text = '12\nam';
           break;
       }
 
