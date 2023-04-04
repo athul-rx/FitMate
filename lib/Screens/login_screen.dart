@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
               width: MediaQuery.of(context).size.width / 1.4,
               height: MediaQuery.of(context).size.height / 4,
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
               height: MediaQuery.of(context).size.height / 1.7,
               child: Column(

@@ -1,6 +1,5 @@
 
-import 'package:fitmate/Screens/login_screen.dart';
-import 'package:fitmate/Screens/person_detail.dart';
+import 'package:fitmate/Screens/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -38,7 +37,7 @@ class MyApp extends StatelessWidget {
         )
 
       ),
-      home: const PersonalDetails(),
+      home: const Dashboard(),
     );
   }
 }
