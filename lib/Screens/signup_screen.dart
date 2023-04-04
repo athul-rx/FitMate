@@ -2,7 +2,7 @@ import 'package:fitmate/Components/button.dart';
 import 'package:fitmate/widgets/TextField.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sign_button/sign_button.dart';
+
 
 import 'login_screen.dart';
 
@@ -40,7 +40,7 @@ class _SignupScreenState extends State<SignupScreen> {
               width: MediaQuery.of(context).size.width / 1.4,
               height: MediaQuery.of(context).size.height / 4,
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
               height: MediaQuery.of(context).size.height / 1.7,
               child: Column(
@@ -78,7 +78,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           )),
                     ),
                   ]),
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     height: MediaQuery.of(context).size.height / 17,
                     child: ElevatedButton(
