@@ -36,26 +36,24 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               width: MediaQuery.of(context).size.width / 1.4,
               height: MediaQuery.of(context).size.height / 13,
             ),
-            Container(
-              child: Column(
-                children: [
-                  Text(
-                    "Hello! My name is FitMate, and I'm here to help you with your fitness goals.",
-                    style: GoogleFonts.archivo(
-                        color: Colors.white, fontSize: 20, letterSpacing: 2),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    "To help us provide you with personalized workout recommendations, we need some basic physical information from you. ",
-                    style: GoogleFonts.archivo(
-                        color: Colors.white.withOpacity(0.7),
-                        fontSize: 15,
-                        letterSpacing: 2),
-                  )
-                ],
-              ),
+            Column(
+              children: [
+                Text(
+                  "Hello! My name is FitMate, and I'm here to help you with your fitness goals.",
+                  style: GoogleFonts.archivo(
+                      color: Colors.white, fontSize: 20, letterSpacing: 2),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  "To help us provide you with personalized workout recommendations, we need some basic physical information from you. ",
+                  style: GoogleFonts.archivo(
+                      color: Colors.white.withOpacity(0.7),
+                      fontSize: 15,
+                      letterSpacing: 2),
+                )
+              ],
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
               height: MediaQuery.of(context).size.height / 3.3,
               child: Column(
