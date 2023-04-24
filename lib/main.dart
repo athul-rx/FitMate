@@ -1,5 +1,5 @@
-import 'package:fitmate/Screens/home_screen.dart';
-import 'package:fitmate/Screens/profile_screen.dart';
+import 'package:fitmate/Screens/activity.dart';
+import 'package:fitmate/Screens/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         )
 
       ),
-      home: const ProfileScreen(),
+      home: const ActivityPage(),
     );
   }
 }
