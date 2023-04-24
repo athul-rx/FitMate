@@ -1,6 +1,8 @@
 
+import 'package:fitmate/widgets/bar_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+// ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
 class ActivityPage extends StatefulWidget {
@@ -15,16 +17,27 @@ class _ActivityPageState extends State<ActivityPage> {
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat("EEEE,d MMMM").format(now);
-    final num steps;
+    // final num steps;
     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 21, 21, 21),
+          elevation: 0,
+          actions: [
+            Image.asset(
+              'assets/images/logo1.png',
+              width: 50,
+              height: 50,
+            )
+          ],
+        ),
         body: SingleChildScrollView(
           child: Container(
               width: double.infinity,
-              height: MediaQuery.of(context).size.height*2,
+              height: MediaQuery.of(context).size.height,
               padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 10),
               decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/background.png'),
+            image: AssetImage('assets/images/background.png'),
             fit: BoxFit.cover,
           ),
               ),
@@ -36,7 +49,7 @@ class _ActivityPageState extends State<ActivityPage> {
               "My Activity",
               style: GoogleFonts.archivo(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 18,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -69,6 +82,9 @@ class _ActivityPageState extends State<ActivityPage> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
+                  const SizedBox(height: 30,),
+                  SizedBox(
+                              height: 120, width: 200, child: BarChartWidget(showtitle: false,)),
                 ],
               ),
             ),
@@ -87,7 +103,7 @@ class _ActivityPageState extends State<ActivityPage> {
                   // crossAxisAlignment: CrossAxisAlignment.start,
             
                   children: [
-                    Image.asset("images/feat.png"),
+                    Image.asset("assets/images/feat.png"),
                     Padding(
                       padding: const EdgeInsets.only( left: 5),
                       child: Column(
@@ -179,7 +195,7 @@ class _ActivityPageState extends State<ActivityPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         
         children: [
-          Image.asset("images/steps.png"),
+          Image.asset("assets/images/steps.png"),
           const SizedBox(width: 10),
           Column(
             // mainAxisAlignment: MainAxisAlignment.center,
@@ -195,7 +211,7 @@ class _ActivityPageState extends State<ActivityPage> {
               ),
               const SizedBox(height: 15),
               Text(
-                steps.toString()+" Steps",
+                "$steps Steps",
                 style: GoogleFonts.archivo(
                   color: Colors.white,
                   fontSize: 16,

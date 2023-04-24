@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(20),
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('images/background.png'),
+              image: AssetImage('assets/images/background.png'),
               fit: BoxFit.cover,
             ),
           ),
@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'images/logo.png',
+                'assets/images/logo.png',
                 width: MediaQuery.of(context).size.width / 1.4,
                 height: MediaQuery.of(context).size.height / 4,
               ),

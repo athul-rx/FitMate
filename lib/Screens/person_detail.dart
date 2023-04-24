@@ -1,5 +1,5 @@
 import 'package:fitmate/Components/button.dart';
-import 'package:fitmate/widgets/TextField.dart';
+import 'package:fitmate/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -23,7 +23,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/background.png'),
+            image: AssetImage('assets/images/background.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -32,7 +32,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              'images/logo1.png',
+              'assets/images/logo1.png',
               width: MediaQuery.of(context).size.width / 1.4,
               height: MediaQuery.of(context).size.height / 13,
             ),
