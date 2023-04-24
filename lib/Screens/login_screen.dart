@@ -1,5 +1,6 @@
 import 'package:fitmate/Components/button.dart';
-import 'package:fitmate/widgets/TextField.dart';
+import 'package:fitmate/Screens/dashboard.dart';
+import 'package:fitmate/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sign_button/sign_button.dart';
@@ -23,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/background.png'),
+            image: AssetImage('assets/images/background.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -32,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              'images/logo.png',
+              'assets/images/logo.png',
               width: MediaQuery.of(context).size.width / 1.4,
               height: MediaQuery.of(context).size.height / 4,
             ),
@@ -86,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           1),
                       onPressed: () {}),
-                  const Button(text: "Login", route: LoginScreen()),
+                  const Button(text: "Login", route: Dashboard()),
                   const Text(
                     'Forgot Password?',
                     style: TextStyle(

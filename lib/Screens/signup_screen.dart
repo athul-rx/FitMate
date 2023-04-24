@@ -1,5 +1,5 @@
 import 'package:fitmate/Components/button.dart';
-import 'package:fitmate/widgets/TextField.dart';
+import 'package:fitmate/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -27,7 +27,7 @@ class _SignupScreenState extends State<SignupScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/background.png'),
+            image: AssetImage('assets/images/background.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -36,7 +36,7 @@ class _SignupScreenState extends State<SignupScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              'images/logo.png',
+              'assets/images/logo.png',
               width: MediaQuery.of(context).size.width / 1.4,
               height: MediaQuery.of(context).size.height / 4,
             ),
