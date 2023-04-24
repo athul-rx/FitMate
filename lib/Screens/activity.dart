@@ -1,4 +1,6 @@
 
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -15,7 +17,6 @@ class _ActivityPageState extends State<ActivityPage> {
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat("EEEE,d MMMM").format(now);
-    final num steps;
     return Scaffold(
         body: SingleChildScrollView(
           child: Container(
@@ -195,7 +196,7 @@ class _ActivityPageState extends State<ActivityPage> {
               ),
               const SizedBox(height: 15),
               Text(
-                steps.toString()+" Steps",
+                "$steps Steps",
                 style: GoogleFonts.archivo(
                   color: Colors.white,
                   fontSize: 16,

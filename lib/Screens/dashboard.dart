@@ -391,7 +391,7 @@ class _DashboardState extends State<Dashboard> {
                     const Color(0xFFffffff).withOpacity(0.1),
                     const Color(0xFFFFFFFF).withOpacity(0.05),
                   ],
-                  stops: [0.1, 1],
+                  stops: const [0.1, 1],
                 ),
                 border: 0,
                 blur: 7,
@@ -402,7 +402,7 @@ class _DashboardState extends State<Dashboard> {
                     const Color(0xFFffffff).withOpacity(0.5),
                     const Color(0xFFFFFFFF).withOpacity(0.5),
                   ],
-                  stops: [0.1, 1],
+                  stops: const [0.1, 1],
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -457,7 +457,7 @@ class _DashboardState extends State<Dashboard> {
                         percent: 0.8,
                         // linearStrokeCap: LinearStrokeCap.roundAll,
                         barRadius: const Radius.circular(10),
-                        progressColor: Color.fromARGB(255, 0, 255, 148),
+                        progressColor: const Color.fromARGB(255, 0, 255, 148),
                       ),
                       //percentage completed text
                       Text(
