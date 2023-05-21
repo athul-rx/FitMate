@@ -1,9 +1,16 @@
+import 'dart:async';
+import 'dart:developer';
+import 'dart:math';
+
+import 'package:fitmate/services/shared_Preference.dart';
 import 'package:fitmate/widgets/bar_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:glassmorphism/glassmorphism.dart';
-
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pedometer/pedometer.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:sensors/sensors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -14,15 +21,89 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   List<double> weeklySteps = [1000, 2000, 3000, 4000, 5000, 6000, 7000];
+  SharedPreferences? prefs;
+  int stepCount = 0;
+  bool isListening = false;
+  int prevStepCount = 0;
+
+
+  late Timer _restTimer;
+
+  void getData() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+    // startListening();
+    _startResetTimer();
+  }
+
+  void startListening() {
+  double threshold = 25; // Adjust this value based on accelerometer sensitivity
+
+  double prevMagnitude = 0.0;
+  double currentMagnitude = 0.0;
+  bool peakDetected = false;
+
+  accelerometerEvents.listen((AccelerometerEvent event) {
+    double x = event.x;
+    double y = event.y;
+    double z = event.z;
+
+    currentMagnitude = sqrt(x * x + y * y + z * z);
+
+    if (currentMagnitude > threshold && prevMagnitude-10 < threshold) {
+      // Peak detected
+      peakDetected = true;
+    }
+
+    if (peakDetected) {
+      setState(() {
+        stepCount++;
+      });
+      peakDetected = false;
+    }
+
+    prevMagnitude = currentMagnitude;
+  });
+}
+
+  void setprefData(int predistance) async {
+    SharedPreferences pre = await SharedPreferences.getInstance();
+    pre.setInt('previousStep', predistance);
+  }
+
+  void getprefData() async {
+    SharedPreferences pre = await SharedPreferences.getInstance();
+    setState(() {
+      prevStepCount = pre.getInt('previousStep') ?? 0;
+    });
+  }
+
+
+
+  void _startResetTimer() {
+    const oneDay = Duration(days: 1);
+    _restTimer = Timer(oneDay, () {
+      setState(() {
+        stepCount = 0;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    startListening();
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 21, 21, 21),
           elevation: 0,
           actions: [
             Image.asset(
-              'images/logo1.png',
+              'assets/images/logo1.png',
               width: 50,
               height: 50,
             )
@@ -31,17 +112,17 @@ class _DashboardState extends State<Dashboard> {
         body: Container(
           width: double.infinity,
           height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('images/background.png'),
+              image: AssetImage('assets/images/background.png'),
               fit: BoxFit.cover,
             ),
           ),
           child: ListView(
             children: [
               Text(
-                "Good Day, User!",
+                "Good Day, ${prefs?.getString('name')}!",
                 style: GoogleFonts.archivo(
                   color: Colors.white,
                   fontSize: 30,
@@ -60,7 +141,7 @@ class _DashboardState extends State<Dashboard> {
               ),
               Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height / 3.3,
+                height: MediaQuery.of(context).size.height / 2.5,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 21, 21, 21),
@@ -98,7 +179,7 @@ class _DashboardState extends State<Dashboard> {
                             const Icon(Icons.directions_walk,
                                 color: Colors.white),
                             Text(
-                              "1000",
+                              stepCount.toString(),
                               style: GoogleFonts.archivo(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -215,7 +296,7 @@ class _DashboardState extends State<Dashboard> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width / 2.5,
-                    height: MediaQuery.of(context).size.height / 4,
+                    height: MediaQuery.of(context).size.height / 3.5,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
                       color: const Color.fromARGB(255, 231, 254, 85),
@@ -233,7 +314,11 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                         SizedBox(
-                            height: 120, width: 200, child: BarChartWidget(showtitle: false,)),
+                            height: 120,
+                            width: 200,
+                            child: BarChartWidget(
+                              showtitle: false,
+                            )),
                         // Text(
                         //   "23.4",
                         //   style: GoogleFonts.archivo(
@@ -274,7 +359,7 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width / 2.5,
-                    height: MediaQuery.of(context).size.height / 4,
+                    height: MediaQuery.of(context).size.height / 3.5,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
                       color: const Color.fromARGB(255, 38, 233, 229),
@@ -355,7 +440,7 @@ class _DashboardState extends State<Dashboard> {
                               color: Colors.black,
                             ),
                             Text(
-                              "1000 ",
+                              "1 ",
                               style: GoogleFonts.archivo(
                                 color: Colors.black,
                                 fontSize: 20,

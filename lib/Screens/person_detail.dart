@@ -1,9 +1,19 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitmate/Components/button.dart';
+import 'package:fitmate/Screens/dashboard.dart';
+import 'package:fitmate/Screens/home_screen.dart';
+import 'package:fitmate/services/shared_Preference.dart';
 import 'package:fitmate/widgets/TextField.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class PersonalDetails extends StatefulWidget {
+  // final String? name;
   const PersonalDetails({super.key});
 
   @override
@@ -11,74 +21,112 @@ class PersonalDetails extends StatefulWidget {
 }
 
 class _PersonalDetailsState extends State<PersonalDetails> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _heightController = TextEditingController();
   final TextEditingController _weightController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    // log(widget.name!);
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height,
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/background.png'),
-            fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 100),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/background.png'),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(
-              'images/logo1.png',
-              width: MediaQuery.of(context).size.width / 1.4,
-              height: MediaQuery.of(context).size.height / 13,
-            ),
-            Column(
-              children: [
-                Text(
-                  "Hello! My name is FitMate, and I'm here to help you with your fitness goals.",
-                  style: GoogleFonts.archivo(
-                      color: Colors.white, fontSize: 20, letterSpacing: 2),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  "To help us provide you with personalized workout recommendations, we need some basic physical information from you. ",
-                  style: GoogleFonts.archivo(
-                      color: Colors.white.withOpacity(0.7),
-                      fontSize: 15,
-                      letterSpacing: 2),
-                )
-              ],
-            ),
-            SizedBox(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height / 3.3,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/logo1.png',
+                width: MediaQuery.of(context).size.width / 1.4,
+                height: MediaQuery.of(context).size.height / 13,
+              ),
+              Column(
                 children: [
-                  textField("Height", false, _heightController),
-                  textField("Weight", false, _weightController),
-                  textField("Age", false, _ageController)
+                  Text(
+                    "Hello! My name is FitMate, and I'm here to help you with your fitness goals.",
+                    style: GoogleFonts.archivo(
+                        color: Colors.white, fontSize: 20, letterSpacing: 2),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    "To help us provide you with personalized workout recommendations, we need some basic physical information from you. ",
+                    style: GoogleFonts.archivo(
+                        color: Colors.white.withOpacity(0.7),
+                        fontSize: 15,
+                        letterSpacing: 2),
+                  )
                 ],
               ),
-            ),
-            Text(
-              "Thank you for helping us improve your fitness journey!",
-              style: GoogleFonts.archivo(
-                  color: Colors.white.withOpacity(0.7),
-                  fontSize: 15,
-                  letterSpacing: 2),
-            ),
+              SizedBox(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height / 3.3,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      textField("Height", false, _heightController),
+                      textField("Weight", false, _weightController),
+                      textField("Age", false, _ageController)
+                    ],
+                  ),
+                ),
+              ),
+              Text(
+                "Thank you for helping us improve your fitness journey!",
+                style: GoogleFonts.archivo(
+                    color: Colors.white.withOpacity(0.7),
+                    fontSize: 15,
+                    letterSpacing: 2),
+              ),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            const Button(text: "Continue", route: PersonalDetails())
-          ],
+              Button(text: "Continue", fun: _detailsToDatabase,formKey: _formKey,route: const HomeScreen())
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void _detailsToDatabase() async{
+    final String height = _heightController.text;
+    final String weight = _weightController.text;
+    final String age = _ageController.text;
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+
+    if(user != null) {
+
+      //update the database
+      await FirebaseFirestore.instance.collection('users').doc(user.email).update({
+        'height': height,
+        'weight': weight,
+        'age': age
+      });
+
+      SharedServices.setLoginDetails();
+
+
+
+      //navigate to home screen
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const Dashboard()),
+          (route) => false
+      );
+    }
+
+
   }
 }
