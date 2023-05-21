@@ -1,8 +1,8 @@
+
 import 'dart:async';
-import 'dart:developer';
 import 'dart:math';
 
-import 'package:fitmate/services/shared_Preference.dart';
+import 'package:fitmate/Screens/activity.dart';
 import 'package:fitmate/widgets/bar_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:glassmorphism/glassmorphism.dart';
@@ -294,67 +294,68 @@ class _DashboardState extends State<Dashboard> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width / 2.5,
-                    height: MediaQuery.of(context).size.height / 3.5,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 231, 254, 85),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          "Daily Progress",
-                          style: GoogleFonts.archivo(
-                            color: Colors.black,
-                            fontSize: 20,
-                            letterSpacing: 2,
-                          ),
-                        ),
-                        SizedBox(
-                            height: 120,
-                            width: 200,
-                            child: BarChartWidget(
-                              showtitle: false,
-                            )),
-                        // Text(
-                        //   "23.4",
-                        //   style: GoogleFonts.archivo(
-                        //     color: Colors.black,
-                        //     fontSize: 30,
-                        //     letterSpacing: 2,
-                        //   ),
-                        // ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            const Icon(
-                              Icons.directions_run,
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const ActivityPage()));
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 2.5,
+                      height: MediaQuery.of(context).size.height / 4,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 231, 254, 85),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            "Daily Progress",
+                            style: GoogleFonts.archivo(
                               color: Colors.black,
+                              fontSize: 20,
+                              letterSpacing: 2,
                             ),
-                            Text(
-                              "3",
-                              style: GoogleFonts.archivo(
+                          ),
+                          SizedBox(
+                              height: 120, width: 200, child: BarChartWidget(showtitle: false,)),
+                          // Text(
+                          //   "23.4",
+                          //   style: GoogleFonts.archivo(
+                          //     color: Colors.black,
+                          //     fontSize: 30,
+                          //     letterSpacing: 2,
+                          //   ),
+                          // ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              const Icon(
+                                Icons.directions_run,
                                 color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 2,
                               ),
-                            ),
-                            Text(
-                              "Hours",
-                              style: GoogleFonts.archivo(
-                                color: Colors.black.withOpacity(0.7),
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 2,
+                              Text(
+                                "3",
+                                style: GoogleFonts.archivo(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 2,
+                                ),
                               ),
-                            ),
-                          ],
-                        )
-                      ],
+                              Text(
+                                "Hours",
+                                style: GoogleFonts.archivo(
+                                  color: Colors.black.withOpacity(0.7),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: 2,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   Container(

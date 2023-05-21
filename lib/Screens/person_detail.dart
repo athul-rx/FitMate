@@ -8,7 +8,7 @@ import 'package:fitmate/Components/button.dart';
 import 'package:fitmate/Screens/dashboard.dart';
 import 'package:fitmate/Screens/home_screen.dart';
 import 'package:fitmate/services/shared_Preference.dart';
-import 'package:fitmate/widgets/TextField.dart';
+import 'package:fitmate/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

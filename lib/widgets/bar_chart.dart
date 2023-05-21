@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 
+// ignore: must_be_immutable
 class BarChartWidget extends StatefulWidget {
   
   bool showtitle = false;
@@ -55,7 +56,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
         barRods: [
           BarChartRodData(
             toY: point.y,
-            color: const Color.fromARGB(200, 21, 21, 21),
+            color: const Color.fromARGB(255, 81, 81, 81),
           )
         ]
       )

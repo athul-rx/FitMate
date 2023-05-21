@@ -4,7 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitmate/Components/button.dart';
 import 'package:fitmate/Screens/home_screen.dart';
 import 'package:fitmate/Screens/person_detail.dart';
-import 'package:fitmate/widgets/TextField.dart';
+import 'package:fitmate/widgets/text_field.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sign_button/sign_button.dart';
