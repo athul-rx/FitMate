@@ -20,10 +20,10 @@ Widget button(String text) {
           child: Text(
             text.toUpperCase(),
             style: GoogleFonts.archivo(
-              fontSize: 15,
+              fontSize: 14,
               color: Colors.black,
               fontWeight: FontWeight.bold,
-              letterSpacing: 1,
+              // letterSpacing: 1,
             ),
           ),
         ),

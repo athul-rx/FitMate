@@ -37,7 +37,7 @@ class _MyNutritionState extends State<MyNutrition> {
         ),
         actions: [
           Image.asset(
-            'images/logo1.png',
+            'assets/images/logo1.png',
             width: 50,
             height: 50,
           )
@@ -50,7 +50,7 @@ class _MyNutritionState extends State<MyNutrition> {
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('images/background.png'),
+              image: AssetImage('assets/images/background.png'),
               fit: BoxFit.cover,
             ),
           ),
@@ -159,7 +159,7 @@ class _MyNutritionState extends State<MyNutrition> {
                         height: MediaQuery.of(context).size.height / 3.3,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('images/food_image.png'),
+                            image: AssetImage('assets/images/food_image.png'),
                             fit: BoxFit.fill,
                           ),
                         ),
