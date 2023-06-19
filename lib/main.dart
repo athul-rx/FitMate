@@ -1,11 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitmate/Screens/activity.dart';
 import 'package:fitmate/Screens/dashboard.dart';
-import 'package:fitmate/Screens/login_screen.dart';
+import 'package:fitmate/Screens/home_screen.dart';
+import 'package:fitmate/Screens/nutrition.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
@@ -21,27 +22,22 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Fitmate',
       theme: ThemeData(
-        textTheme: TextTheme(
-          displayLarge: GoogleFonts.archivo(
-            fontSize: 72.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.white
-          ),
-          titleLarge: GoogleFonts.archivo(
-            fontSize: 36.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.white
-          ),
-          bodyMedium: GoogleFonts.archivo(
-            fontSize: 14.0,
-            fontWeight: FontWeight.normal,
-            color: Colors.white
-          ),
-        )
-
-      ),
-      home: const ActivityPage(),
+          primarySwatch: Colors.blue,
+          textTheme: TextTheme(
+            displayLarge: GoogleFonts.archivo(
+                fontSize: 72.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white),
+            titleLarge: GoogleFonts.archivo(
+                fontSize: 36.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white),
+            bodyMedium: GoogleFonts.archivo(
+                fontSize: 14.0,
+                fontWeight: FontWeight.normal,
+                color: Colors.white),
+          )),
+      home: MyNutrition(),
     );
   }
 }
-

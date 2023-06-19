@@ -49,6 +49,7 @@ dependencies:
   shared_preferences: ^2.1.1
   pedometer: ^3.0.0
   sensors: ^2.0.3
+  http: ^0.13.6
 
 
 dev_dependencies:

@@ -1,8 +1,8 @@
-
 import 'dart:async';
 import 'dart:math';
 
 import 'package:fitmate/Screens/activity.dart';
+import 'package:fitmate/Screens/workout_page1.dart';
 import 'package:fitmate/widgets/bar_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:glassmorphism/glassmorphism.dart';
@@ -26,7 +26,6 @@ class _DashboardState extends State<Dashboard> {
   bool isListening = false;
   int prevStepCount = 0;
 
-
   late Timer _restTimer;
 
   void getData() async {
@@ -42,34 +41,35 @@ class _DashboardState extends State<Dashboard> {
   }
 
   void startListening() {
-  double threshold = 25; // Adjust this value based on accelerometer sensitivity
+    double threshold =
+        25; // Adjust this value based on accelerometer sensitivity
 
-  double prevMagnitude = 0.0;
-  double currentMagnitude = 0.0;
-  bool peakDetected = false;
+    double prevMagnitude = 0.0;
+    double currentMagnitude = 0.0;
+    bool peakDetected = false;
 
-  accelerometerEvents.listen((AccelerometerEvent event) {
-    double x = event.x;
-    double y = event.y;
-    double z = event.z;
+    accelerometerEvents.listen((AccelerometerEvent event) {
+      double x = event.x;
+      double y = event.y;
+      double z = event.z;
 
-    currentMagnitude = sqrt(x * x + y * y + z * z);
+      currentMagnitude = sqrt(x * x + y * y + z * z);
 
-    if (currentMagnitude > threshold && prevMagnitude-10 < threshold) {
-      // Peak detected
-      peakDetected = true;
-    }
+      if (currentMagnitude > threshold && prevMagnitude - 10 < threshold) {
+        // Peak detected
+        peakDetected = true;
+      }
 
-    if (peakDetected) {
-      setState(() {
-        stepCount++;
-      });
-      peakDetected = false;
-    }
+      if (peakDetected) {
+        setState(() {
+          stepCount++;
+        });
+        peakDetected = false;
+      }
 
-    prevMagnitude = currentMagnitude;
-  });
-}
+      prevMagnitude = currentMagnitude;
+    });
+  }
 
   void setprefData(int predistance) async {
     SharedPreferences pre = await SharedPreferences.getInstance();
@@ -82,8 +82,6 @@ class _DashboardState extends State<Dashboard> {
       prevStepCount = pre.getInt('previousStep') ?? 0;
     });
   }
-
-
 
   void _startResetTimer() {
     const oneDay = Duration(days: 1);
@@ -296,7 +294,10 @@ class _DashboardState extends State<Dashboard> {
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const ActivityPage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ActivityPage()));
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width / 2.5,
@@ -318,7 +319,11 @@ class _DashboardState extends State<Dashboard> {
                             ),
                           ),
                           SizedBox(
-                              height: 120, width: 200, child: BarChartWidget(showtitle: false,)),
+                              height: 120,
+                              width: 200,
+                              child: BarChartWidget(
+                                showtitle: false,
+                              )),
                           // Text(
                           //   "23.4",
                           //   style: GoogleFonts.archivo(
@@ -561,7 +566,14 @@ class _DashboardState extends State<Dashboard> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const MyWorkourtPage1(),
+                                ),
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   const Color.fromARGB(255, 231, 254, 85),

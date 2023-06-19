@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:fitmate/Models/calories_response.dart';
+import 'package:fitmate/services/food_calories.dart';
 import 'package:fitmate/widgets/DropDownField.dart';
 import 'package:fitmate/widgets/ElevatedButton.dart';
 import 'package:fitmate/widgets/Table.dart';
@@ -11,7 +15,22 @@ class MyNutrition extends StatefulWidget {
   State<MyNutrition> createState() => _MyNutritionState();
 }
 
-List<String> _food = ["Burger", "Sandwitch"];
+List<String> _food = [
+  "Rice",
+  "Oats",
+  "Bread",
+  "Pasta",
+  "Noodles",
+  "Potato",
+  "Appam",
+  "Tea",
+  "Coffee",
+  "Brisket"
+];
+double? calories;
+double? finalCalories;
+List<String> meals = ["Breakfast", "Lunch", "Dinner", "Snacks"];
+List<String> quantity = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 final List<Map<String, dynamic>> items = [
   {'name': 'Item 1', 'quantity': 5, 'size': 'Small'},
   {'name': 'Item 2', 'quantity': 10, 'size': 'Medium'},
@@ -19,11 +38,25 @@ final List<Map<String, dynamic>> items = [
   {'name': 'Item 4', 'quantity': 7, 'size': 'Extra Large'},
 ];
 
-TextEditingController _dropdowncontroller = TextEditingController();
+TextEditingController _mealsController = TextEditingController();
+TextEditingController _foodController = TextEditingController();
+TextEditingController _quantityController = TextEditingController();
+TextEditingController _gramController = TextEditingController();
+
+void fetchData() {
+  ApiServices()
+      .fetchNutritionData("rice")
+      .then((List<CaloriesResponseModel> res) {
+    log("${res[0].calories} res");
+  }).catchError((error) {
+    log(error);
+  });
+}
 
 class _MyNutritionState extends State<MyNutrition> {
   @override
   Widget build(BuildContext context) {
+    // fetchData();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 21, 21, 21),
@@ -37,7 +70,7 @@ class _MyNutritionState extends State<MyNutrition> {
         ),
         actions: [
           Image.asset(
-            'images/logo1.png',
+            'assets/images/logo1.png',
             width: 50,
             height: 50,
           )
@@ -50,7 +83,7 @@ class _MyNutritionState extends State<MyNutrition> {
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('images/background.png'),
+              image: AssetImage('assets/images/background.png'),
               fit: BoxFit.cover,
             ),
           ),
@@ -70,7 +103,7 @@ class _MyNutritionState extends State<MyNutrition> {
               Container(
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height / 4,
-                padding: const EdgeInsets.only(left: 20),
+                padding: const EdgeInsets.only(left: 3),
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 21, 21, 21),
                   borderRadius: BorderRadius.circular(20),
@@ -159,7 +192,7 @@ class _MyNutritionState extends State<MyNutrition> {
                         height: MediaQuery.of(context).size.height / 3.3,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('images/food_image.png'),
+                            image: AssetImage('assets/images/food_image.png'),
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -229,38 +262,109 @@ class _MyNutritionState extends State<MyNutrition> {
                   ),
                   const SizedBox(height: 20),
                   DropdownField(
-                      hintText: "Food/Drink",
-                      controller: _dropdowncontroller,
-                      onChanged: (newValue) {},
-                      dropdownValues: _food),
-                  const SizedBox(height: 20),
-                  DropdownField(
                       hintText: "BreakFast/Lunch/Dinner",
-                      controller: _dropdowncontroller,
-                      onChanged: (newValue) {},
-                      dropdownValues: _food),
+                      controller: _mealsController,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _mealsController.text = newValue;
+                        });
+                      },
+                      dropdownValues: meals),
                   const SizedBox(height: 20),
                   DropdownField(
-                      hintText: "Enter the Item",
-                      controller: _dropdowncontroller,
-                      onChanged: (newValue) {},
+                      hintText: "Select the food item",
+                      controller: _foodController,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _foodController.text = newValue;
+                        });
+                      },
                       dropdownValues: _food),
                   const SizedBox(height: 20),
+                  // DropdownField(
+                  //     hintText: "Enter the Item",
+                  //     controller: _dropdowncontroller,
+                  //     onChanged: (newValue) {
+                  //       setState(() {
+                  //         _dropdowncontroller.text = newValue!;
+                  //       });
+
+                  //     },
+                  //     dropdownValues: _food),
+                  // const SizedBox(height: 20),
                   DropdownField(
-                      hintText: "Enter the serving size in grams",
-                      controller: _dropdowncontroller,
-                      onChanged: (newValue) {},
-                      dropdownValues: _food),
+                    hintText: "Enter the serving size in grams",
+                    controller: _gramController,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _gramController.text = newValue;
+                      });
+                    },
+                    dropdownValues: _food,
+                  ),
                   const SizedBox(height: 20),
                   DropdownField(
                       hintText: "Select Quantity",
-                      controller: _dropdowncontroller,
-                      onChanged: (newValue) {},
-                      dropdownValues: _food)
+                      controller: _quantityController,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _quantityController.text = newValue;
+                        });
+                      },
+                      dropdownValues: quantity),
                 ],
               ),
               const SizedBox(height: 20),
-              button("Calculated calories count"),
+              ElevatedButton(
+                onPressed: () {
+                  ApiServices()
+                      .fetchNutritionData(
+                    _foodController.text,
+                  )
+                      .then((List<CaloriesResponseModel> res) {
+                    calories = res[0].calories;
+                    log("${res[0].calories} res");
+                  }).catchError((error) {
+                    log(error);
+                  });
+
+                  setState(() {
+                    finalCalories = _quantityController.text.isEmpty
+                        ? calories
+                        : calories! * double.parse(_quantityController.text);
+                  });
+                  log(finalCalories.toString());
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 231, 254, 85),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Text(
+                        "CALCULATE CALORIES COUNT",
+                        style: GoogleFonts.archivo(
+                          fontSize: 14,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          // letterSpacing: 1,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    const Icon(
+                      Icons.north_east,
+                      color: Colors.black,
+                      size: 13,
+                    ),
+                  ],
+                ),
+              ),
               const SizedBox(
                 height: 30,
               ),
@@ -275,7 +379,9 @@ class _MyNutritionState extends State<MyNutrition> {
                 ),
               ),
               const SizedBox(height: 20),
-              MyTable(data: items,)
+              MyTable(
+                data: items,
+              )
             ],
           ),
         ),
