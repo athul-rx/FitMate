@@ -107,7 +107,7 @@ class MyTable extends StatelessWidget {
                 ),
                 TableCell(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Center(
                       child: Text(
                         item['quantity'].toString(),
@@ -133,16 +133,16 @@ class MyTable extends StatelessWidget {
                     ),
                   ),
                 ),
-                TableCell(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+                  child: TableCell(
                     child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
                             const Color.fromARGB(255, 231, 254, 85),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       child: const Icon(Icons.south_east, color: Colors.black, size: 13),

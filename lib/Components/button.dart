@@ -1,3 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -5,7 +9,10 @@ import 'package:google_fonts/google_fonts.dart';
 class Button extends StatefulWidget {
   final String text;
   final Widget route;
-  const Button({super.key, required this.text,required this.route});
+  final GlobalKey<FormState>? formKey;
+  final Function? fun;
+
+  const Button({super.key, required this.text, required this.route, this.formKey, this.fun});
 
   @override
   State<Button> createState() => _ButtonState();
@@ -18,6 +25,7 @@ class _ButtonState extends State<Button> {
       width: double.infinity,
       height: MediaQuery.of(context).size.height / 17,
       child: ElevatedButton(
+        
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
           elevation: 0,
@@ -27,8 +35,20 @@ class _ButtonState extends State<Button> {
           ),
         ),
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => widget.route));
+          if(widget.formKey != null) log(widget.formKey!.currentState!.validate().toString());
+          if(widget.formKey?.currentState?.validate() ?? true) {
+
+            log(widget.fun.toString());
+
+            widget.fun?.call();
+
+            if(widget.fun == null) {
+              Navigator.push(
+                context, MaterialPageRoute(builder: (context) => widget.route));
+            }
+
+          }
+          
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
