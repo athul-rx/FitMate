@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitmate/Models/calories_response.dart';
 import 'package:fitmate/services/food_calories.dart';
 import 'package:fitmate/widgets/DropDownField.dart';
@@ -27,7 +29,7 @@ List<String> _food = [
   "Coffee",
   "Brisket"
 ];
-double? calories;
+double? calories = 0;
 double? finalCalories;
 List<String> meals = ["Breakfast", "Lunch", "Dinner", "Snacks"];
 List<String> quantity = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
@@ -344,23 +346,36 @@ class _MyNutritionState extends State<MyNutrition> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(18.0),
-                      child: Text(
-                        "CALCULATE CALORIES COUNT",
-                        style: GoogleFonts.archivo(
-                          fontSize: 14,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          // letterSpacing: 1,
+                    Expanded(
+                      flex: 6,
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: GestureDetector(
+                          onTap: () => addData(
+                              _foodController.text,
+                              _mealsController.text,
+                              int.parse(_quantityController.text),
+                              finalCalories ?? 0),
+                          child: Text(
+                            "CALCULATE CALORIES COUNT",
+                            style: GoogleFonts.archivo(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              // letterSpacing: 1,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                     const SizedBox(width: 5),
-                    const Icon(
-                      Icons.north_east,
-                      color: Colors.black,
-                      size: 13,
+                    const Expanded(
+                      flex: 1,
+                      child: Icon(
+                        Icons.north_east,
+                        color: Colors.black,
+                        size: 23,
+                      ),
                     ),
                   ],
                 ),
@@ -387,5 +402,38 @@ class _MyNutritionState extends State<MyNutrition> {
         ),
       ),
     );
+  }
+
+  void addData(String name, String type, num quantity, num calories) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    log(user!.uid + "user id");
+    log(name + "name");
+
+    if (user != null) {
+      await FirebaseFirestore.instance.collection("food_items").doc().set({
+        "name": name,
+        "type": type,
+        "quantity": quantity,
+        "calories": calories,
+        "userId": user.uid,
+      });
+
+      log("Data Added Successfully");
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Data Added Successfully"),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Something went wrong"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }
