@@ -1,5 +1,5 @@
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:fitmate/widgets/DropDownField.dart';
-import 'package:fitmate/widgets/date_picker.dart';
 import 'package:fitmate/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key? key}) : super(key: key);
 
-  final _dobController = TextEditingController();
+  // final _dobController = TextEditingController();
   final _genderController = TextEditingController();
   final _heightController = TextEditingController();
   final _weightController = TextEditingController();
@@ -31,7 +31,7 @@ class ProfileScreen extends StatelessWidget {
           child: Container(
             width: double.infinity,
             height: MediaQuery.of(context).size.height,
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/background.png'),
@@ -61,9 +61,9 @@ class ProfileScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const SizedBox(height: 20),
-                      Stack(
+                      const Stack(
                         alignment: Alignment.center,
-                        children: const [
+                        children: [
                           SizedBox(
                             height: 120,
                             width: 120,
@@ -88,16 +88,19 @@ class ProfileScreen extends StatelessWidget {
                         style: GoogleFonts.archivo(
                           color: Colors.white,
                           fontSize: 20,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 50),
                       Padding(
                         padding: const EdgeInsets.only(left: 25),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Image.asset("assets/images/steps.png"),
+                            Icon(
+                              Icons.fire_extinguisher_outlined,
+                              color: Colors.white,
+                            ),
                             // const SizedBox(width: 20),
 
                             Column(
@@ -114,8 +117,8 @@ class ProfileScreen extends StatelessWidget {
                                   "Calories",
                                   style: GoogleFonts.archivo(
                                     color: Colors.white,
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w200,
                                   ),
                                 ),
                               ],
@@ -145,8 +148,8 @@ class ProfileScreen extends StatelessWidget {
                                   "Daily Goal",
                                   style: GoogleFonts.archivo(
                                     color: Colors.white,
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w200,
                                   ),
                                 ),
                               ],
@@ -161,7 +164,8 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 Container(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height / 2.5,
+                  height: MediaQuery.of(context).size.height / 2,
+                  padding: const EdgeInsets.only(right: 20),
                   decoration: BoxDecoration(
                     color: const Color.fromARGB(255, 12, 12, 12),
                     borderRadius: BorderRadius.circular(20),
@@ -172,37 +176,61 @@ class ProfileScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          "Date of Birth",
-                          style: GoogleFonts.archivo(
-                            color: const Color.fromARGB(255, 246, 246, 246),
-                            fontSize: 17,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        // Expanded(child: DatePickerFormField(controller: _dobController)),
                         const SizedBox(height: 10),
-                        Text(
-                          "Daily Goal",
-                          style: GoogleFonts.archivo(
-                            color: Colors.white,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        // Expanded(
-                        //   child: DropdownField(
-                        //       hintText: "Food/Drink",
-                        //       controller: _genderController,
-                        //       onChanged: (newValue) {},
-                        //       dropdownValues: genderValue),
-                        // ),
 
-                        const SizedBox(height: 10),
-                        textField("Weight", false, _weightController),
-                        const SizedBox(height: 10),
-                        textField("Height", false, _heightController),
+                        const SizedBox(height: 20),
+
+                        // DatePickerFormField(controller: _dobController),
+                        DateTimePicker(
+                          initialValue: '',
+                          // controller: _dobController,
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                          type: DateTimePickerType.date,
+                          
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                          dateLabelText: 'Date of Birth',
+                          onChanged: (val) => print(val),
+                          autocorrect: true,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Date of Birth',
+                            labelStyle: TextStyle(color: Colors.white),
+                            suffixIcon: Icon(
+                              Icons.calendar_today,
+                              color: Colors.white,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          validator: (val) {
+                            print(val);
+                            return null;
+                          },
+                          onSaved: (val) => print(val),
+                        ),
+                        const SizedBox(height: 20),
+
+                        DropdownField(
+                          dropdownValues: ["Male", "Female"],
+                          hintText: "Gender",
+                          onChanged: (value) {
+                            _genderController.text = value;
+                          },
+                          controller: _genderController,
+                        ),
+                        const SizedBox(height: 20),
+                        textField("Weight", false, _weightController, true),
+                        const SizedBox(height: 20),
+                        textField("Height", false, _heightController, true),
                       ],
                     ),
                   ),

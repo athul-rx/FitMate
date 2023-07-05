@@ -2,11 +2,10 @@
 import 'package:flutter/material.dart';
 
 
-Widget textField(String hintText, bool isPassword, TextEditingController controller) {
+Widget textField(String hintText, bool isPassword, TextEditingController controller, [bool isProfile = false]) {
   return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 20),
     decoration: BoxDecoration(
-      color: Colors.grey[200],
+      color: isProfile ? Colors.black : Colors.white,
       borderRadius: BorderRadius.circular(5),
     ),
     child: TextFormField(
@@ -21,9 +20,25 @@ Widget textField(String hintText, bool isPassword, TextEditingController control
         }
         return null;
       },
+      style: TextStyle(
+        color: isProfile ? Colors.white : Colors.black,
+      ),
+      
       decoration: InputDecoration(
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: isProfile ? Colors.white : Colors.black,
+          ),
+        ),
+        
+
         hintText: hintText,
-        border: InputBorder.none,
+        hintStyle: TextStyle(
+          color: isProfile ? Colors.white : Colors.black,
+        ),
+        focusColor: isProfile ? Colors.white : Colors.black,
+        // filled: true, 
+        // fillColor: Color.fromARGB(0, 255, 255, 255)
       ),
     ),
   );

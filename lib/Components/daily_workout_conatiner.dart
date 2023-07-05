@@ -1,3 +1,4 @@
+import 'package:fitmate/Screens/pose_detector_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -64,7 +65,14 @@ class _DailyWorkoutContainerState extends State<DailyWorkoutContainer> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>  PoseDetectorView(),
+                  ),
+                );
+              },
               style: ElevatedButton.styleFrom(
                 // minimumSize: const Size(100, 40),
                   shape: RoundedRectangleBorder(

@@ -39,13 +39,22 @@ class _DropdownFieldState extends State<DropdownField> {
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
       isExpanded: true,
-      dropdownColor: Colors.white,
+      style: const TextStyle(color: Colors.white),
+      dropdownColor: Colors.black,
       hint: Text(widget.hintText, style: const TextStyle(color: Colors.white),),
       focusColor: Colors.grey,
       value: _selectedOption, // set the selected option
       items: _dropdownMenuItems,
       decoration: const InputDecoration(
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.all(
+              Radius.circular(30)
+          )
+        ),
+        focusColor: Colors.white,
         border: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
           borderRadius: BorderRadius.all(
               Radius.circular(30)
           )

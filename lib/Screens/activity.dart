@@ -4,7 +4,6 @@
 import 'package:fitmate/widgets/bar_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
 class ActivityPage extends StatefulWidget {

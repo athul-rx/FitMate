@@ -113,6 +113,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         'height': height,
         'weight': weight,
         'age': age
+        
       });
 
       SharedServices.setLoginDetails();

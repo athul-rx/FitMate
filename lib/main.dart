@@ -1,15 +1,16 @@
+import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:fitmate/Screens/activity.dart';
 import 'package:fitmate/Screens/dashboard.dart';
-import 'package:fitmate/Screens/home_screen.dart';
-import 'package:fitmate/Screens/login_screen.dart';
-import 'package:fitmate/Screens/nutrition.dart';
+import 'package:fitmate/Screens/pose_detector_view.dart';
+import 'package:fitmate/Screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+List<CameraDescription> cameras = [];
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  cameras = await availableCameras();
   runApp(const MyApp());
 }
 
@@ -38,7 +39,76 @@ class MyApp extends StatelessWidget {
                 fontWeight: FontWeight.normal,
                 color: Colors.white),
           )),
-      home: MyNutrition(),
+      home: Dashboard(),
+    );
+  }
+}
+
+class Home extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Google ML Kit Demo App'),
+        centerTitle: true,
+        elevation: 0,
+      ),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  ExpansionTile(
+                    title: const Text('Vision APIs'),
+                    children: [
+                      CustomCard('Pose Detection', PoseDetectorView()),
+
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomCard extends StatelessWidget {
+  final String _label;
+  final Widget _viewPage;
+  final bool featureCompleted;
+
+  const CustomCard(this._label, this._viewPage, {this.featureCompleted = true});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 5,
+      margin: EdgeInsets.only(bottom: 10),
+      child: ListTile(
+        tileColor: Theme.of(context).primaryColor,
+        title: Text(
+          _label,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        onTap: () {
+          if (!featureCompleted) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content:
+                    const Text('This feature has not been implemented yet')));
+          } else {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => _viewPage));
+          }
+        },
+      ),
     );
   }
 }

@@ -4,7 +4,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 
-// ignore: must_be_immutable
 class BarChartWidget extends StatefulWidget {
   
   bool showtitle = false;

@@ -4,8 +4,9 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:fitmate/Components/button.dart';
+import 'package:fitmate/Screens/person_detail.dart';
+import 'package:fitmate/services/googleauth.dart';
 import 'package:fitmate/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -102,30 +103,42 @@ class _SignupScreenState extends State<SignupScreen> {
                           onPressed: () {
                             // googleLogin();
                           },
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Image(
-                                  image: AssetImage(
-                                      "assets/images/google_logo.png"),
-                                  height: 18.0,
-                                  width: 24,
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  'Sign in with Google',
-                                  style: GoogleFonts.archivo(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
+                          child: GestureDetector(
+                            onTap: () {
+                              GoogleSignInProvider().signInWithGoogle();
+                              addDataToFirestore();
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const PersonalDetails()),
+                                  (route) => false);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Image(
+                                    image: AssetImage(
+                                        "assets/images/google_logo.png"),
+                                    height: 18.0,
+                                    width: 24,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    'Sign in with Google',
+                                    style: GoogleFonts.archivo(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -187,7 +200,6 @@ class _SignupScreenState extends State<SignupScreen> {
       _emailController.clear();
       _passwordController.clear();
       _confirmPasswordController.clear();
-
 
       //navigate to login screen
       Navigator.of(context).pushReplacement(
@@ -259,6 +271,19 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         );
       }
+    }
+  }
+
+  void addDataToFirestore() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+
+    if (user != null) {
+      await FirebaseFirestore.instance.collection("users").doc(user.email).set({
+        "name": user.displayName,
+        "email": user.email,
+        "password": user.uid,
+      });
     }
   }
 }
