@@ -40,6 +40,7 @@ class _ButtonState extends State<Button> {
 
             log(widget.fun.toString());
 
+
             widget.fun?.call();
 
             if(widget.fun == null) {

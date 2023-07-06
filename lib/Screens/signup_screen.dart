@@ -104,8 +104,8 @@ class _SignupScreenState extends State<SignupScreen> {
                             // googleLogin();
                           },
                           child: GestureDetector(
-                            onTap: () {
-                              GoogleSignInProvider().signInWithGoogle();
+                            onTap: () async{
+                              await GoogleSignInProvider().signInWithGoogle();
                               addDataToFirestore();
                               Navigator.pushAndRemoveUntil(
                                   context,

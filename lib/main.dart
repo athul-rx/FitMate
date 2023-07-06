@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:camera/camera.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitmate/Screens/dashboard.dart';
+import 'package:fitmate/Screens/home_screen.dart';
 import 'package:fitmate/Screens/pose_detector_view.dart';
 import 'package:fitmate/Screens/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +18,38 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Widget _defaultHome = const HomeScreen();
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        log('User is currently signed out!');
+        setState(() {
+          _defaultHome = const HomeScreen();
+        });
+      } else {
+        log(user.uid);
+        setState(() {
+          _defaultHome = Dashboard();
+        });
+      }
+    });
+  
+  }
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Fitmate',
@@ -39,7 +69,7 @@ class MyApp extends StatelessWidget {
                 fontWeight: FontWeight.normal,
                 color: Colors.white),
           )),
-      home: Dashboard(),
+      home: _defaultHome,
     );
   }
 }
@@ -64,7 +94,6 @@ class Home extends StatelessWidget {
                     title: const Text('Vision APIs'),
                     children: [
                       CustomCard('Pose Detection', PoseDetectorView()),
-
                     ],
                   ),
                   SizedBox(

@@ -73,8 +73,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      textField("Height", false, _heightController),
-                      textField("Weight", false, _weightController),
+                      textField("Height (cm)", false, _heightController),
+                      textField("Weight (Kg)", false, _weightController),
                       textField("Age", false, _ageController)
                     ],
                   ),
@@ -87,10 +87,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                     fontSize: 15,
                     letterSpacing: 2),
               ),
-
               const SizedBox(height: 20),
-
-              Button(text: "Continue", fun: _detailsToDatabase,formKey: _formKey,route: const HomeScreen())
+              Button(
+                  text: "Continue",
+                  fun: _detailsToDatabase,
+                  formKey: _formKey,
+                  route: Dashboard())
             ],
           ),
         ),
@@ -98,36 +100,25 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     );
   }
 
-  void _detailsToDatabase() async{
+  void _detailsToDatabase() async {
     final String height = _heightController.text;
     final String weight = _weightController.text;
     final String age = _ageController.text;
 
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
+    log(user!.email!);
 
-    if(user != null) {
+     FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.email)
+        .update({'height': height, 'weight': weight, 'age': age});
+    log("Details added to database");
 
-      //update the database
-      await FirebaseFirestore.instance.collection('users').doc(user.email).update({
-        'height': height,
-        'weight': weight,
-        'age': age
-        
-      });
-
-      SharedServices.setLoginDetails();
-
-
-
-      //navigate to home screen
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const Dashboard()),
-          (route) => false
-      );
-    }
-
-
+    //navigate to home screen
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => Dashboard()),
+        (route) => false);
   }
 }

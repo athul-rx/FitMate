@@ -95,7 +95,7 @@ class _CameraViewState extends State<CameraView> {
         Navigator.pushAndRemoveUntil(
           context,
           SlideTopPageRoute(
-            page: Dashboard(),
+            page: Dashboard(isparty: true),
           ),
               (Route<dynamic> route) => false,
         );
@@ -200,7 +200,7 @@ class _CameraViewState extends State<CameraView> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                widget.text!,
+                                widget.text ?? 'Take a picture',
                                 style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
                               ),
                               const SizedBox(width: 10),
