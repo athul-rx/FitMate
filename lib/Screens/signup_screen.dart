@@ -10,6 +10,7 @@ import 'package:fitmate/services/googleauth.dart';
 import 'package:fitmate/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login_screen.dart';
 
@@ -186,6 +187,8 @@ class _SignupScreenState extends State<SignupScreen> {
       }
 
       log("going to add user to firestore");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('name', _nameController.text);
       // adding user to firestore
       await FirebaseFirestore.instance
           .collection("users")

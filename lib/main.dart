@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitmate/Screens/dashboard.dart';
 import 'package:fitmate/Screens/home_screen.dart';
+import 'package:fitmate/Screens/nutrition.dart';
 import 'package:fitmate/Screens/pose_detector_view.dart';
 import 'package:fitmate/Screens/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +70,7 @@ class _MyAppState extends State<MyApp> {
                 fontWeight: FontWeight.normal,
                 color: Colors.white),
           )),
-      home: _defaultHome,
+      home: MyNutrition(),
     );
   }
 }

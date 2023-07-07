@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:confetti/confetti.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitmate/Screens/activity.dart';
+import 'package:fitmate/Screens/profile_screen.dart';
 import 'package:fitmate/Screens/workout_page1.dart';
 import 'package:fitmate/widgets/bar_chart.dart';
 import 'package:flutter/material.dart';
@@ -28,12 +29,14 @@ class _DashboardState extends State<Dashboard> {
   double caloriesBurned = 0.0;
   bool isListening = false;
   int prevStepCount = 0;
+  String name = "";
 
   late Timer _restTimer;
   late ConfettiController _controllerCenter;
 
   void getData() async {
     prefs = await SharedPreferences.getInstance();
+    name = prefs!.getString('name') ?? "";
   }
 
   @override
@@ -45,7 +48,7 @@ class _DashboardState extends State<Dashboard> {
     // startListening();
     _startResetTimer();
 
-    if(widget.isparty){
+    if (widget.isparty) {
       _controllerCenter.play();
     }
   }
@@ -129,24 +132,35 @@ class _DashboardState extends State<Dashboard> {
     startListening();
     calculateCaloriesBurned(stepCount, 0.4);
 
-    String name = FirebaseAuth.instance.currentUser!.email.toString();
 
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Scaffold(
-            appBar: AppBar(
-              backgroundColor: const Color.fromARGB(255, 21, 21, 21),
-              elevation: 0,
-              actions: [
-                Image.asset(
-                  'assets/images/logo1.png',
-                  width: 50,
-                  height: 50,
-                )
-              ],
+    return (Scaffold(
+        appBar: AppBar(
+            backgroundColor: const Color.fromARGB(255, 21, 21, 21),
+            elevation: 2,
+            leadingWidth: 50,
+            leading: Image.asset(
+              'assets/images/logo1.png',
+              width: 50,
+              height: 50,
             ),
-            body: Container(
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfileScreen()),
+                  );
+                },
+                icon: const Icon(
+                  Icons.person,
+                  color: Colors.white,
+                ),
+              ),
+            ]),
+        body: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
               width: double.infinity,
               height: MediaQuery.of(context).size.height,
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
@@ -158,7 +172,6 @@ class _DashboardState extends State<Dashboard> {
               ),
               child: ListView(
                 children: [
-                  
                   Text(
                     "Good Day, $name!",
                     style: GoogleFonts.archivo(
@@ -660,18 +673,18 @@ class _DashboardState extends State<Dashboard> {
                   )
                 ],
               ),
-            )),
-        ConfettiWidget(
-          confettiController: _controllerCenter,
-          blastDirectionality: BlastDirectionality.explosive,
-          blastDirection: pi / 2,
-          maxBlastForce: 100,
-          minBlastForce: 80,
-          emissionFrequency: 0.05,
-          numberOfParticles: 50,
-          gravity: 0.2,
-        ),
-      ],
-    );
+            ),
+            ConfettiWidget(
+              confettiController: _controllerCenter,
+              blastDirectionality: BlastDirectionality.explosive,
+              blastDirection: pi / 2,
+              maxBlastForce: 100,
+              minBlastForce: 80,
+              emissionFrequency: 0.05,
+              numberOfParticles: 50,
+              gravity: 0.2,
+            ),
+          ],
+        )));
   }
 }

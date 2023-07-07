@@ -1,18 +1,38 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:fitmate/widgets/DropDownField.dart';
 import 'package:fitmate/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
 
-  // final _dobController = TextEditingController();
-  final _genderController = TextEditingController();
-  final _heightController = TextEditingController();
-  final _weightController = TextEditingController();
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final _dobController = TextEditingController(text: "20");
+  final _genderController = TextEditingController(text: "Male");
+
+  final _heightController = TextEditingController(text: "170");
+
+  final _weightController = TextEditingController(text: "60");
+
+  String name = "user";
+
+  void getname() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? name = prefs.getString('name');
+    name = name!;
+  }
 
   List<String> genderValue = ["Male", "Female"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +104,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 20),
                       Text(
-                        "John Doe",
+                        name,
                         style: GoogleFonts.archivo(
                           color: Colors.white,
                           fontSize: 20,
@@ -186,7 +206,7 @@ class ProfileScreen extends StatelessWidget {
                           // controller: _dobController,
                           style: TextStyle(fontSize: 16, color: Colors.white),
                           type: DateTimePickerType.date,
-                          
+
                           firstDate: DateTime(2000),
                           lastDate: DateTime(2100),
                           dateLabelText: 'Date of Birth',
@@ -239,5 +259,22 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
         ));
+  }
+  void getData()  {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.email)
+        .get()
+        .then((value) {
+      
+      setState(() {
+        _weightController.text = value['weight'];
+        _heightController.text = value['height'];
+        _dobController.text = value['age'];
+      });
+     
+
+      
+    });
   }
 }

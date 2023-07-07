@@ -89,7 +89,7 @@ class _CameraViewState extends State<CameraView> {
     final screenHeight = MediaQuery.of(context).size.height;
     final cameraHeight = screenHeight * 2.5 / 3;
     final counterHeight = screenHeight - cameraHeight;
-    if (widget.counter == 3) {
+    if (widget.counter == 10) {
       // Pop the page to the previous page
       Future.delayed(Duration.zero, () {
         Navigator.pushAndRemoveUntil(
