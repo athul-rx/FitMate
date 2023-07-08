@@ -219,7 +219,7 @@ class _SignupScreenState extends State<SignupScreen> {
             return Dialog(
               child: Container(
                 padding: const EdgeInsets.all(16.0),
-                child: const Column(
+                child:  Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.check_circle, size: 48.0, color: Colors.green),
