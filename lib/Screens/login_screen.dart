@@ -2,9 +2,11 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitmate/Components/button.dart';
+import 'package:fitmate/Models/user_response.dart';
 import 'package:fitmate/Screens/dashboard.dart';
 import 'package:fitmate/Screens/home_screen.dart';
 import 'package:fitmate/Screens/person_detail.dart';
+import 'package:fitmate/services/api_services.dart';
 import 'package:fitmate/widgets/text_field.dart';
 
 import 'package:flutter/material.dart';
@@ -123,87 +125,34 @@ class _LoginScreenState extends State<LoginScreen> {
   void _login() async{
     if(_formKey.currentState?.validate() ?? true) {
       try {
-        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: emailController.text,
-            password: passwordController.text
-        );
-        if(userCredential.user != null) {
 
-          log('${userCredential.user!.displayName} logged in \n\n\n\n\n\n');
+        LoginResponse? response = await APIServices().login(emailController.text, passwordController.text);
+        if(response != null) {
+          // ignore: use_build_context_synchronously
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Login Successful'),
+              backgroundColor: Colors.green,
+            ),
+          );
 
+          //Navigate to the Dashboard
           // ignore: use_build_context_synchronously
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) =>  Dashboard()),
+            MaterialPageRoute(builder: (context) => Dashboard()),
                 (Route<dynamic> route) => false,
           );
-          // ignore: use_build_context_synchronously
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              Future.delayed(const Duration(seconds: 3), () {
-                Navigator.of(context).pop(); // Close the dialog after 3 seconds
-              });
-
-
-              return Dialog(
-                child: Container(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const[
-                      // Add your registration success UI here, such as an icon or image
-                      Icon(Icons.check_circle, size: 48.0, color: Colors.green),
-                      SizedBox(height: 16.0),
-                      Text(
-                        'Login Successful!',
-                        style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-          emailController.clear();
-          passwordController.clear();
-
-        }
-        else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Something went wrong! Please try again.', style: TextStyle(color: Colors.white),),
-              backgroundColor: Colors.red,
-
-            ),
-          );
         }
 
 
-        //show the success message
-
-        // ignore: use_build_context_synchronously
-
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('No user found for that email.', style: TextStyle(color: Colors.white),),
-              backgroundColor: Colors.red,
-
-            ),
-          );
-        } else if (e.code == 'wrong-password') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Wrong password provided for that user.', style: TextStyle(color: Colors.white),),
-              backgroundColor: Colors.red,
-
-            ),
-          );
-        }
-        // Handle other login errors if needed
-        return null;
+      } catch (e) {
+        log(e.toString());
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Invalid Credentials'),
+          ),
+        );
       }
     }
   }

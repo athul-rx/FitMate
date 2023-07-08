@@ -50,7 +50,6 @@ class _DashboardState extends State<Dashboard> {
     _startResetTimer();
     fetchCaloriesForCurrentUser("UVknNkzc2ONKpcAsgkzMLCo5m8t2");
 
-
     if (widget.isparty) {
       _controllerCenter.play();
     }
@@ -134,7 +133,7 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     startListening();
     calculateCaloriesBurned(stepCount, 0.4);
-
+    double progress = stepCount / 10000;
 
     return (Scaffold(
         appBar: AppBar(
@@ -206,7 +205,7 @@ class _DashboardState extends State<Dashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
-                          "You've walked 7234 steps!",
+                          "You've walked $stepCount steps!",
                           style: GoogleFonts.archivo(
                             color: Colors.white,
                             fontSize: 20,
@@ -220,12 +219,14 @@ class _DashboardState extends State<Dashboard> {
                               height: 120,
                               width: 120,
                               child: CircularProgressIndicator(
-                                value: 0.5,
+                                value: 0.75,
+
                                 strokeWidth: 8,
                                 backgroundColor:
                                     Color.fromARGB(255, 0, 255, 148),
                                 valueColor: AlwaysStoppedAnimation<Color>(
-                                    Color.fromARGB(255, 75, 72, 72)),
+                                  Color.fromARGB(255, 75, 72, 72),
+                                ),
                               ),
                             ),
                             Column(
@@ -691,7 +692,7 @@ class _DashboardState extends State<Dashboard> {
         )));
   }
 
-   // Fetch the calories for the current user
+  // Fetch the calories for the current user
   Future<int> fetchCaloriesForCurrentUser(String userId) async {
     // Get the current date
     DateTime now = DateTime.now();
@@ -701,17 +702,15 @@ class _DashboardState extends State<Dashboard> {
     int totalCalories = 0;
 
     try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('food_items')
-          .get();
-     print('snapshot.docs.length: ${snapshot.docs.length}');
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('food_items').get();
+      print('snapshot.docs.length: ${snapshot.docs.length}');
       // Iterate over the documents and calculate the total calories
       for (QueryDocumentSnapshot doc in snapshot.docs) {
         int calories = doc['calories'];
         setState(() {
           totalCalories += calories;
         });
-
       }
       print('Total calories: $totalCalories');
     } catch (e) {
@@ -720,5 +719,4 @@ class _DashboardState extends State<Dashboard> {
 
     return totalCalories;
   }
-
 }

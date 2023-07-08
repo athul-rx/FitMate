@@ -57,6 +57,7 @@ dependencies:
   image_picker: ^0.8.7+1
   confetti: 
   intl: ^0.17.0
+  jwt_decoder: ^2.0.1
 
 
 dev_dependencies:

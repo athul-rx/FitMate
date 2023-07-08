@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitmate/Components/button.dart';
 import 'package:fitmate/Screens/person_detail.dart';
+import 'package:fitmate/services/api_services.dart';
 import 'package:fitmate/services/googleauth.dart';
 import 'package:fitmate/widgets/text_field.dart';
 import 'package:flutter/material.dart';
@@ -105,9 +106,8 @@ class _SignupScreenState extends State<SignupScreen> {
                             // googleLogin();
                           },
                           child: GestureDetector(
-                            onTap: () async{
+                            onTap: () async {
                               await GoogleSignInProvider().signInWithGoogle();
-                              addDataToFirestore();
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
@@ -145,13 +145,50 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                       // const SizedBox(height: 5),
-                      Button(
-                          text: "SIGN UP",
-                          formKey: _formKey,
-                          fun: () {
-                            _registerUser(context);
+                      SizedBox(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height / 17,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                          onPressed: () async {
+                            if (_formKey.currentState?.validate() ?? true) {
+                              _registerUser(
+                                  context,
+                                  _nameController.text,
+                                  _emailController.text,
+                                  _passwordController.text);
+                            }
                           },
-                          route: const LoginScreen()),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Sign Up",
+                                style: GoogleFonts.archivo(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(width: 15),
+                              const Icon(
+                                Icons.arrow_forward,
+                                color: Colors.black,
+                                size: 16,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -162,120 +199,48 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
     );
   }
-  void _registerUser(BuildContext context) async {
+
+  void _registerUser(
+      BuildContext context, String name, String email, String password) async {
     try {
-      UserCredential userCredential =
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
+      bool response = await APIServices().RegisterUser(name, email, password);
+      log(response.toString());
 
-      // if (userCredential.user == null) {
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     const SnackBar(
-      //       content: Text(
-      //         'Something went wrong! Please try again',
-      //         style: TextStyle(color: Colors.white),
-      //       ),
-      //       backgroundColor: Colors.red,
-      //     ),
-      //   );
-      //   return;
-      // }
+      if (response) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const PersonalDetails(),
+          ),
+        );
 
-      log("Going to add user to Firestore");
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('name', _nameController.text);
-      log("Name added to shared preferences");
-      String name = _nameController.text;
-      String email = _emailController.text;
-      String password = _passwordController.text;
-      log("Name: $name");
-      log("Email: $email");
-
-
-
-
-      // Adding user to Firestore
-      await FirebaseFirestore.instance.collection("users").doc(email).set({
-        "name": name,
-        "email": email,
-        "password": password,
-      });
-      _nameController.clear();
-      _emailController.clear();
-      _passwordController.clear();
-      _confirmPasswordController.clear();
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const PersonalDetails(),
-        ),
-      );
-
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          Future.delayed(const Duration(seconds: 3), () {
-            Navigator.of(context).pop(); // Close the dialog after 3 seconds
-          });
-
-          return Dialog(
-            child: Container(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Icon(Icons.check_circle, size: 48.0, color: Colors.green),
-                  SizedBox(height: 16.0),
-                  Text(
-                    'Registration Successful!',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                child:  Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.check_circle, size: 48.0, color: Colors.green),
+                    SizedBox(height: 16.0),
+                    Text(
+                      'Registration Successful!',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          );
-        },
-      );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'The password provided is too weak.',
-              style: TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.red,
-          ),
-        );
-      } else if (e.code == 'email-already-in-use') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'The account already exists for that email.',
-              style: TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.red,
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Something went wrong! Please try again',
-              style: TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.red,
-          ),
+            );
+          },
         );
       }
     } catch (e) {
-      log("Error adding user to Firestore: $e");
+      log(e.toString());
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -285,21 +250,6 @@ class _SignupScreenState extends State<SignupScreen> {
           backgroundColor: Colors.red,
         ),
       );
-    }
-  }
-
-
-
-  void addDataToFirestore() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-
-    if (user != null) {
-      await FirebaseFirestore.instance.collection("users").doc(user.email).set({
-        "name": user.displayName,
-        "email": user.email,
-        "password": user.uid,
-      });
     }
   }
 }

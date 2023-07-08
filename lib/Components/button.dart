@@ -8,11 +8,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 class Button extends StatefulWidget {
   final String text;
-  final Widget route;
+  final Widget? route;
   final GlobalKey<FormState>? formKey;
   final Function? fun;
 
-  const Button({super.key, required this.text, required this.route, this.formKey, this.fun});
+  const Button({super.key, required this.text,  this.route, this.formKey, this.fun});
 
   @override
   State<Button> createState() => _ButtonState();
@@ -34,18 +34,18 @@ class _ButtonState extends State<Button> {
             borderRadius: BorderRadius.circular(5),
           ),
         ),
-        onPressed: () {
+        onPressed: () async{
           if(widget.formKey != null) log(widget.formKey!.currentState!.validate().toString());
           if(widget.formKey?.currentState?.validate() ?? true) {
 
             log(widget.fun.toString());
 
 
-            widget.fun?.call();
+            await widget.fun?.call();
 
             if(widget.fun == null) {
               Navigator.push(
-                context, MaterialPageRoute(builder: (context) => widget.route));
+                context, MaterialPageRoute(builder: (context) => widget.route ?? Container()));
             }
 
           }
@@ -57,7 +57,6 @@ class _ButtonState extends State<Button> {
           children: [
             Text(
               widget.text,
-              
               style: GoogleFonts.archivo(
                 color: Colors.black,
                 fontSize: 16,
