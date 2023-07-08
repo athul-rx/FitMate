@@ -162,56 +162,56 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
     );
   }
-
   void _registerUser(BuildContext context) async {
     try {
-      //create the user with email and password
       UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
 
-      //checking if user is added or not
-      if (userCredential.user == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Something went wrong! Please try again',
-              style: TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
+      // if (userCredential.user == null) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(
+      //       content: Text(
+      //         'Something went wrong! Please try again',
+      //         style: TextStyle(color: Colors.white),
+      //       ),
+      //       backgroundColor: Colors.red,
+      //     ),
+      //   );
+      //   return;
+      // }
 
-      log("going to add user to firestore");
+      log("Going to add user to Firestore");
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('name', _nameController.text);
-      // adding user to firestore
-      await FirebaseFirestore.instance
-          .collection("users")
-          .doc(_emailController.text)
-          .set({
-        "name": _nameController.text,
-        "email": _emailController.text,
-        "password": _passwordController.text,
-      });
+      log("Name added to shared preferences");
+      String name = _nameController.text;
+      String email = _emailController.text;
+      String password = _passwordController.text;
+      log("Name: $name");
+      log("Email: $email");
 
+
+
+
+      // Adding user to Firestore
+      await FirebaseFirestore.instance.collection("users").doc(email).set({
+        "name": name,
+        "email": email,
+        "password": password,
+      });
       _nameController.clear();
       _emailController.clear();
       _passwordController.clear();
       _confirmPasswordController.clear();
 
-      //navigate to login screen
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const LoginScreen(),
+          builder: (context) => const PersonalDetails(),
         ),
       );
-
-      //show the success message
 
       showDialog(
         context: context,
@@ -226,15 +226,15 @@ class _SignupScreenState extends State<SignupScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: const [
-                  // Add your registration success UI here, such as an icon or image
                   Icon(Icons.check_circle, size: 48.0, color: Colors.green),
                   SizedBox(height: 16.0),
                   Text(
                     'Registration Successful!',
                     style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
                 ],
               ),
@@ -274,8 +274,21 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         );
       }
+    } catch (e) {
+      log("Error adding user to Firestore: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Something went wrong! Please try again',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
+
+
 
   void addDataToFirestore() async {
     FirebaseAuth auth = FirebaseAuth.instance;

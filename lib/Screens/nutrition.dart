@@ -1,9 +1,8 @@
 import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitmate/Models/calories_response.dart';
-import 'package:fitmate/services/food_calories.dart';
+import 'package:fitmate/Models/food_request.dart';
+import 'package:fitmate/Models/food_response.dart';
+import 'package:fitmate/services/api_services.dart';
 import 'package:fitmate/widgets/DropDownField.dart';
 import 'package:fitmate/widgets/ElevatedButton.dart';
 import 'package:fitmate/widgets/Table.dart';
@@ -43,10 +42,9 @@ final List<Map<String, dynamic>> items = [
 TextEditingController _mealsController = TextEditingController();
 TextEditingController _foodController = TextEditingController();
 TextEditingController _quantityController = TextEditingController();
-TextEditingController _gramController = TextEditingController();
 
 void fetchData() {
-  ApiServices()
+  APIServices()
       .fetchNutritionData("rice")
       .then((List<CaloriesResponseModel> res) {
     log("${res[0].calories} res");
@@ -56,30 +54,31 @@ void fetchData() {
 }
 
 class _MyNutritionState extends State<MyNutrition> {
+  List<FoodItem> foodItems = [];
   @override
   Widget build(BuildContext context) {
     // fetchData();
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 21, 21, 21),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.white,
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 21, 21, 21),
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          actions: [
+            Image.asset(
+              'assets/images/logo1.png',
+              width: 50,
+              height: 50,
+            )
+          ],
         ),
-        actions: [
-          Image.asset(
-            'assets/images/logo1.png',
-            width: 50,
-            height: 50,
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Container(
+        body: SingleChildScrollView(
+            child: Container(
           width: double.infinity,
           height: MediaQuery.of(context).size.height,
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
@@ -89,273 +88,328 @@ class _MyNutritionState extends State<MyNutrition> {
               fit: BoxFit.cover,
             ),
           ),
-          child: ListView(
-            children: [
-              Text(
-                "Nutrition",
-                style: GoogleFonts.archivo(
-                  color: Colors.white,
-                  fontSize: 30,
-                  letterSpacing: 2,
-                  fontWeight: FontWeight.w500,
-                ),
+          child: ListView(children: [
+            Text(
+              "Nutrition",
+              style: GoogleFonts.archivo(
+                color: Colors.white,
+                fontSize: 30,
+                letterSpacing: 2,
+                fontWeight: FontWeight.w500,
               ),
+            ),
 
-              //first container
-              Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height / 4,
-                padding: const EdgeInsets.only(left: 3),
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 21, 21, 21),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                margin: const EdgeInsets.symmetric(vertical: 20),
-                child: Stack(
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width / 2.5,
-                      padding: const EdgeInsets.only(top: 20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "John's Diet Plan",
-                            style: GoogleFonts.archivo(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 2,
-                            ),
+            //first container
+            Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height / 4,
+              padding: const EdgeInsets.only(left: 3),
+              decoration: BoxDecoration(
+                // color: const Color.fromARGB(255, 21, 21, 21),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              child: Stack(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2.5,
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "John's Diet Plan",
+                          style: GoogleFonts.archivo(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2,
                           ),
+                        ),
 
-                          //horizontal line
-                          Container(
-                            padding: const EdgeInsets.only(left: 10),
-                            width: MediaQuery.of(context).size.width / 2.5,
-                            height: 1,
+                        //horizontal line
+                        Container(
+                          padding: const EdgeInsets.only(left: 10),
+                          width: MediaQuery.of(context).size.width / 2.5,
+                          height: 1,
+                          color: Colors.white.withOpacity(0.7),
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                        ),
+
+                        Text(
+                          "1950 Cal | South Indian",
+                          style: GoogleFonts.archivo(
                             color: Colors.white.withOpacity(0.7),
-                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 1.5,
                           ),
-                          Text(
-                            "1950 Cal | South Indian",
-                            style: GoogleFonts.archivo(
-                              color: Colors.white.withOpacity(0.7),
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 1.5,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
 
-                          SizedBox(
-                            width: 120,
-                            height: 40,
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color.fromARGB(255, 231, 254, 85),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "Continue",
-                                    style: GoogleFonts.archivo(
-                                      fontSize: 13,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 1,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  const Icon(
-                                    Icons.north_east,
-                                    color: Colors.black,
-                                    size: 13,
-                                  ),
-                                ],
+                        SizedBox(
+                          width: 120,
+                          height: 40,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 231, 254, 85),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
                               ),
                             ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Continue",
+                                  style: GoogleFonts.archivo(
+                                    fontSize: 13,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1,
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                const Icon(
+                                  Icons.north_east,
+                                  color: Colors.black,
+                                  size: 13,
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        width: 170,
-                        height: MediaQuery.of(context).size.height / 3.3,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/images/food_image.png'),
-                            fit: BoxFit.fill,
-                          ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      width: 170,
+                      height: MediaQuery.of(context).size.height / 3.3,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/food_image.png'),
+                          fit: BoxFit.fill,
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-
-              //paragraph
-
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  "Lets gather your preferences and create a plan to help you achieve your goal!",
-                  style: GoogleFonts.archivo(
-                    color: Colors.white.withOpacity(0.7),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 1.5,
                   ),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-              //create new diet plan
-              button("CREATE NEW DIET PLAN"),
-              const SizedBox(
-                height: 40,
-              ),
-
-              Text(
-                "Calories Counter",
-                style: GoogleFonts.archivo(
-                  color: Colors.white,
-                  fontSize: 30,
-                  letterSpacing: 2,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Text(
-                  "Food Calorie Counter below allows you to choose from thousands of foods and brands, and see nutrition facts. Get started by entering your food and drink choices",
-                  style: GoogleFonts.archivo(
-                    color: Colors.white.withOpacity(0.7),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 1.5,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              Column(
-                children: [
-                  Center(
-                    child: Text(
-                      "ITEM 1",
-                      style: GoogleFonts.archivo(
-                          color: Colors.white.withOpacity(0.9),
-                          fontSize: 15,
-                          letterSpacing: 1.5),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  DropdownField(
-                      hintText: "BreakFast/Lunch/Dinner",
-                      controller: _mealsController,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _mealsController.text = newValue;
-                        });
-                      },
-                      dropdownValues: meals),
-                  const SizedBox(height: 20),
-                  DropdownField(
-                      hintText: "Select the food item",
-                      controller: _foodController,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _foodController.text = newValue;
-                        });
-                      },
-                      dropdownValues: _food),
-                  const SizedBox(height: 20),
-                  // DropdownField(
-                  //     hintText: "Enter the Item",
-                  //     controller: _dropdowncontroller,
-                  //     onChanged: (newValue) {
-                  //       setState(() {
-                  //         _dropdowncontroller.text = newValue!;
-                  //       });
-
-                  //     },
-                  //     dropdownValues: _food),
-                  // const SizedBox(height: 20),
-                  DropdownField(
-                    hintText: "Enter the serving size in grams",
-                    controller: _gramController,
-                    onChanged: (newValue) {
-                      setState(() {
-                        _gramController.text = newValue;
-                      });
-                    },
-                    dropdownValues: _food,
-                  ),
-                  const SizedBox(height: 20),
-                  DropdownField(
-                      hintText: "Select Quantity",
-                      controller: _quantityController,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _quantityController.text = newValue;
-                        });
-                      },
-                      dropdownValues: quantity),
                 ],
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  ApiServices()
-                      .fetchNutritionData(
-                    _foodController.text,
-                  )
-                      .then((List<CaloriesResponseModel> res) {
-                    calories = res[0].calories;
-                    log("${res[0].calories} res");
-                  }).catchError((error) {
-                    log(error);
-                  });
+            ),
 
-                  setState(() {
-                    finalCalories = _quantityController.text.isEmpty
-                        ? calories
-                        : calories! * double.parse(_quantityController.text);
-                  });
-                  log(finalCalories.toString());
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 231, 254, 85),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+            //paragraph
+
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                "Lets gather your preferences and create a plan to help you achieve your goal!",
+                style: GoogleFonts.archivo(
+                  color: Colors.white.withOpacity(0.7),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 1.5,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+            //create new diet plan
+            button("CREATE NEW DIET PLAN"),
+            const SizedBox(
+              height: 40,
+            ),
+
+            Text(
+              "Calories Counter",
+              style: GoogleFonts.archivo(
+                color: Colors.white,
+                fontSize: 30,
+                letterSpacing: 2,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Text(
+                "Food Calorie Counter below allows you to choose from thousands of foods and brands, and see nutrition facts. Get started by entering your food and drink choices",
+                style: GoogleFonts.archivo(
+                  color: Colors.white.withOpacity(0.7),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 1.5,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            Column(
+              children: [
+                Center(
+                  child: Text(
+                    "ITEM 1",
+                    style: GoogleFonts.archivo(
+                        color: Colors.white.withOpacity(0.9),
+                        fontSize: 15,
+                        letterSpacing: 1.5),
                   ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      flex: 6,
-                      child: Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: GestureDetector(
-                          onTap: () => addData(
-                              _foodController.text,
-                              _mealsController.text,
-                              int.parse(_quantityController.text),
-                              finalCalories ?? 0),
+                const SizedBox(height: 20),
+                DropdownField(
+                    hintText: "BreakFast/Lunch/Dinner",
+                    controller: _mealsController,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _mealsController.text = newValue;
+                      });
+                    },
+                    dropdownValues: meals),
+                const SizedBox(height: 20),
+                DropdownField(
+                    hintText: "Select the food item",
+                    controller: _foodController,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _foodController.text = newValue;
+                      });
+                    },
+                    dropdownValues: _food),
+                const SizedBox(height: 20),
+                // DropdownField(
+                //     hintText: "Enter the Item",
+                //     controller: _dropdowncontroller,
+                //     onChanged: (newValue) {
+                //       setState(() {
+                //         _dropdowncontroller.text = newValue!;
+                //       });
+
+                //     },
+                //     dropdownValues: _food),
+                // const SizedBox(height: 20),
+                // DropdownField(
+                //   hintText: "Enter the serving size in grams",
+                //   controller: _gramController,
+                //   onChanged: (newValue) {
+                //     setState(() {
+                //       _gramController.text = newValue;
+                //     });
+                //   },
+                //   dropdownValues: _food,
+                // ),
+                const SizedBox(height: 20),
+                // DropdownField(
+                //     hintText: "Select Quantity",
+                //     controller: _quantityController,
+                //     onChanged: (newValue) {
+                //       setState(() {
+                //         _quantityController.text = newValue;
+                //       });
+                //     },
+                //     dropdownValues: quantity),
+                TextFormField(
+                  controller: _quantityController,
+                  keyboardType: TextInputType.number,
+                  style: const TextStyle(
+                    color: Colors.white, // Set the text color to white
+                  ),
+                  decoration: InputDecoration(
+                    hintText: "Enter the quantity",
+                    hintStyle: GoogleFonts.archivo(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 1.5,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // const SizedBox(height: 20),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     Text(
+                //       "Calories",
+                //       style: GoogleFonts.archivo(
+                //         color: Colors.white.withOpacity(0.7),
+                //         fontSize: 15,
+                //         fontWeight: FontWeight.w500,
+                //         letterSpacing: 1.5,
+                //       ),
+                //     ),
+                //     Text(
+                //       finalCalories.toString(),
+                //       style: GoogleFonts.archivo(
+                //         color: Colors.white.withOpacity(0.7),
+                //         fontSize: 15,
+                //         fontWeight: FontWeight.w500,
+                //         letterSpacing: 1.5,
+                //       ),
+                //     )
+                //   ],
+                // ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () async {
+                    log("CAL0RIES OF Food");
+                    // ignore: avoid_single_cascade_in_expression_statements
+                    await APIServices()
+                        .fetchNutritionData(_foodController.text)
+                        .then((List<CaloriesResponseModel> res) {
+                      calories = res[0].calories;
+                      log("${res[0].calories} res");
+                    }).catchError((error) {
+                      log(error);
+                    });
+                    log("$calories calories");
+
+                    setState(() {
+                      finalCalories = _quantityController.text.isEmpty
+                          ? calories
+                          : calories! * double.parse(_quantityController.text);
+                    });
+                    log(finalCalories.toString());
+
+                    addData(_foodController.text, _mealsController.text,
+                        double.parse(_quantityController.text), finalCalories!);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 231, 254, 85),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        flex: 6,
+                        child: Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          // child: GestureDetector(
+                          //   onTap: () => addData(
+                          //       _foodController.text,
+                          //       _mealsController.text,
+                          //       double.parse(_quantityController.text),
+                          //       1),
                           child: Text(
                             "CALCULATE CALORIES COUNT",
                             style: GoogleFonts.archivo(
@@ -367,73 +421,71 @@ class _MyNutritionState extends State<MyNutrition> {
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 5),
-                    const Expanded(
-                      flex: 1,
-                      child: Icon(
-                        Icons.north_east,
-                        color: Colors.black,
-                        size: 23,
+                      const SizedBox(width: 5),
+                      const Expanded(
+                        flex: 1,
+                        child: Icon(
+                          Icons.north_east,
+                          color: Colors.black,
+                          size: 23,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
+                const SizedBox(
+                  height: 30,
+                ),
 
-              Text(
-                "Calories Counter",
-                style: GoogleFonts.archivo(
-                  color: Colors.white,
-                  fontSize: 20,
-                  letterSpacing: 2,
-                  fontWeight: FontWeight.w500,
+                Text(
+                  "Calories Counter",
+                  style: GoogleFonts.archivo(
+                    color: Colors.white,
+                    fontSize: 20,
+                    letterSpacing: 2,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              MyTable(
-                data: items,
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+                const SizedBox(height: 20),
+                MyTable(foodItems: foodItems),
+              ],
+            ),
+          ]),
+        )));
   }
 
-  void addData(String name, String type, num quantity, num calories) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
-    log(user!.uid + "user id");
-    log(name + "name");
-
-    if (user != null) {
-      await FirebaseFirestore.instance.collection("food_items").doc().set({
-        "name": name,
-        "type": type,
-        "quantity": quantity,
-        "calories": calories,
-        "userId": user.uid,
-      });
-
-      log("Data Added Successfully");
-
+  void addData(
+      String name, String type, double quantity, double calories) async {
+    FoodCaloriesRequestModel foodCaloriesRequestModel =
+        FoodCaloriesRequestModel(
+            foodName: name,
+            foodType: type,
+            quantity: quantity,
+            calories: calories);
+    log("$name $type $quantity $calories");
+    bool response = await APIServices().addFood(foodCaloriesRequestModel);
+    if (response) {
+      log("data added");
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Data Added Successfully"),
-          backgroundColor: Colors.green,
+          content: Text("Data Added"),
         ),
       );
     } else {
+      log("data not added");
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Something went wrong"),
-          backgroundColor: Colors.red,
+          content: Text("Data not Added"),
         ),
       );
     }
   }
+
+  //fetch food data
+  void fetchData() {
+  
+  }
 }
+

@@ -9,6 +9,7 @@ import 'package:fitmate/Screens/workout_page1.dart';
 import 'package:fitmate/widgets/bar_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:glassmorphism/glassmorphism.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:sensors/sensors.dart';
@@ -47,6 +48,8 @@ class _DashboardState extends State<Dashboard> {
         ConfettiController(duration: const Duration(seconds: 2));
     // startListening();
     _startResetTimer();
+    fetchCaloriesForCurrentUser("UVknNkzc2ONKpcAsgkzMLCo5m8t2");
+
 
     if (widget.isparty) {
       _controllerCenter.play();
@@ -687,4 +690,35 @@ class _DashboardState extends State<Dashboard> {
           ],
         )));
   }
+
+   // Fetch the calories for the current user
+  Future<int> fetchCaloriesForCurrentUser(String userId) async {
+    // Get the current date
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
+
+    // Create a variable to store the total calories
+    int totalCalories = 0;
+
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('food_items')
+          .get();
+     print('snapshot.docs.length: ${snapshot.docs.length}');
+      // Iterate over the documents and calculate the total calories
+      for (QueryDocumentSnapshot doc in snapshot.docs) {
+        int calories = doc['calories'];
+        setState(() {
+          totalCalories += calories;
+        });
+
+      }
+      print('Total calories: $totalCalories');
+    } catch (e) {
+      print('Error fetching calories: $e');
+    }
+
+    return totalCalories;
+  }
+
 }
