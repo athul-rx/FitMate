@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitmate/Components/button.dart';
 import 'package:fitmate/Screens/dashboard.dart';
 import 'package:fitmate/Screens/home_screen.dart';
+import 'package:fitmate/services/api_services.dart';
 import 'package:fitmate/services/shared_Preference.dart';
 import 'package:fitmate/widgets/text_field.dart';
 import 'package:flutter/material.dart';
@@ -105,20 +106,34 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     final String weight = _weightController.text;
     final String age = _ageController.text;
 
-    FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
-    log(user!.email!);
+    bool response = await APIServices().AddPersonalData(height, weight, age);
 
-     FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.email)
-        .update({'height': height, 'weight': weight, 'age': age});
-    log("Details added to database");
+    if (response) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Personal Details Added'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      //navigate to Dashboard screen
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Dashboard()),
+          (route) => false);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error Occured'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
 
     //navigate to home screen
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => Dashboard()),
-        (route) => false);
+    // Navigator.pushAndRemoveUntil(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => Dashboard()),
+    //     (route) => false);
   }
 }
