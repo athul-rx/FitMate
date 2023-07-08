@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitmate/Components/button.dart';
+import 'package:fitmate/Screens/dashboard.dart';
 import 'package:fitmate/Screens/home_screen.dart';
 import 'package:fitmate/Screens/person_detail.dart';
 import 'package:fitmate/widgets/text_field.dart';
@@ -133,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // ignore: use_build_context_synchronously
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => const PersonalDetails()),
+            MaterialPageRoute(builder: (context) =>  Dashboard()),
                 (Route<dynamic> route) => false,
           );
           // ignore: use_build_context_synchronously

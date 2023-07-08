@@ -81,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const SizedBox(height: 20),
-                      const Stack(
+                      Stack(
                         alignment: Alignment.center,
                         children: [
                           SizedBox(

@@ -45,12 +45,11 @@ class _MyAppState extends State<MyApp> {
         });
       }
     });
-  
   }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Fitmate',
@@ -70,7 +69,7 @@ class _MyAppState extends State<MyApp> {
                 fontWeight: FontWeight.normal,
                 color: Colors.white),
           )),
-      home: MyNutrition(),
+      home: const MyNutrition(),
     );
   }
 }

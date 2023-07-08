@@ -1,9 +1,10 @@
+import 'package:fitmate/Models/food_response.dart';
 import 'package:flutter/material.dart';
 
 class MyTable extends StatelessWidget {
-  final List<Map<String, dynamic>> data;
-
-  const MyTable({Key? key, required this.data}) : super(key: key);
+  final List<FoodItem> foodItems;
+  
+  const MyTable({Key? key, required this.foodItems}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +81,7 @@ class MyTable extends StatelessWidget {
               ),
             ],
           ),
-          for (var item in data)
+          for (var item in foodItems)
             TableRow(
               decoration: const BoxDecoration(
                 border: Border(
@@ -96,7 +97,7 @@ class MyTable extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Center(
                       child: Text(
-                        item['name'],
+                        item.foodName,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -110,7 +111,7 @@ class MyTable extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Center(
                       child: Text(
-                        item['quantity'].toString(),
+                        item.foodType,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -124,7 +125,7 @@ class MyTable extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Center(
                       child: Text(
-                        item['size'],
+                        item.quantity.toString(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -133,19 +134,17 @@ class MyTable extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
-                  child: TableCell(
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 231, 254, 85),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                 TableCell(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Center(
+                      child: Text(
+                        item.quantity.toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
                         ),
                       ),
-                      child: const Icon(Icons.south_east, color: Colors.black, size: 13),
                     ),
                   ),
                 ),
