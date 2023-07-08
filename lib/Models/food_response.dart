@@ -23,7 +23,7 @@ class FoodResponseModel {
 class FoodItem {
   int userId;
   String foodName;
-  int quantity;
+  double quantity;
   DateTime foodTime;
   int id;
   String foodType;

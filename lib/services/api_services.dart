@@ -70,7 +70,7 @@ class APIServices {
 
   //get added food from user
 
-Future<FoodResponseModel> fetchFoodData(String query) async {
+Future<FoodResponseModel> fetchFoodData() async {
   final url = Uri.parse('https://fitmate-api-r2ic.onrender.com/user/data/food/details/read/1');
 
   final response = await http.post(url);

@@ -1,13 +1,18 @@
+import 'dart:developer';
 import 'package:fitmate/Models/food_response.dart';
 import 'package:flutter/material.dart';
 
 class MyTable extends StatelessWidget {
   final List<FoodItem> foodItems;
-  
+
   const MyTable({Key? key, required this.foodItems}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    log("$foodItems  ${foodItems.length}food item in MyTable");
+    // log(foodItems.foodName.toString());
+      log(foodItems.last.foodName.toString() + "last food item in MyTable");
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.black,
@@ -36,7 +41,22 @@ class MyTable extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 16),
                   child: Center(
                     child: Text(
-                      'Item',
+                      'Food Name',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              TableCell(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Center(
+                    child: Text(
+                      'Food Type',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -66,7 +86,7 @@ class MyTable extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 16),
                   child: Center(
                     child: Text(
-                      'Size',
+                      'Calories',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -76,12 +96,15 @@ class MyTable extends StatelessWidget {
                   ),
                 ),
               ),
-              TableCell(
-                child: SizedBox(),
-              ),
+              // TableCell(
+              //   child: SizedBox(),
+              // ),
             ],
           ),
-          for (var item in foodItems)
+          // for (var item = foodItems[0],index=0; item != null; item = foodItems[1])
+
+
+          for (int item = 0; item < foodItems.length; item++)
             TableRow(
               decoration: const BoxDecoration(
                 border: Border(
@@ -97,7 +120,8 @@ class MyTable extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Center(
                       child: Text(
-                        item.foodName,
+                        // foodItems[item].foodName,
+                        foodItems[item].foodName,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -111,7 +135,7 @@ class MyTable extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Center(
                       child: Text(
-                        item.foodType,
+                        foodItems[item].foodType,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -125,7 +149,7 @@ class MyTable extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Center(
                       child: Text(
-                        item.quantity.toString(),
+                        foodItems[item].quantity.toString(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -134,12 +158,12 @@ class MyTable extends StatelessWidget {
                     ),
                   ),
                 ),
-                 TableCell(
+                TableCell(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Center(
                       child: Text(
-                        item.quantity.toString(),
+                        foodItems[item].calories.toString(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -148,6 +172,7 @@ class MyTable extends StatelessWidget {
                     ),
                   ),
                 ),
+                
               ],
             ),
         ],
