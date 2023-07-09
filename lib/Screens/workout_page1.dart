@@ -1,4 +1,5 @@
 import 'package:fitmate/Components/daily_workout_conatiner.dart';
+import 'package:fitmate/Screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -14,6 +15,18 @@ class _MyWorkourtPage1State extends State<MyWorkourtPage1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 21, 21, 21),
+            elevation: 2,
+            leadingWidth: 50,
+            actions: [
+              Image.asset(
+              'assets/images/logo1.png',
+              width: 50,
+              height: 50,
+            ),
+            ]
+      ),
         body: SingleChildScrollView(
       child: Container(
           width: double.infinity,

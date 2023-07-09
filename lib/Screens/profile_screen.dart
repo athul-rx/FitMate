@@ -79,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 return SingleChildScrollView(
                   child: Container(
                     width: double.infinity,
-                    // height: MediaQuery.of(context).size.height,
+                    // height: MediaQuery.of(context).size.height * 1.2,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 28, vertical: 10),
                     decoration: const BoxDecoration(
@@ -217,7 +217,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const SizedBox(height: 20),
                         Container(
                           width: double.infinity,
-                          height: MediaQuery.of(context).size.height / 2,
+                          // height: MediaQuery.of(context).size.height / 2,
                           padding: const EdgeInsets.only(right: 20),
                           decoration: BoxDecoration(
                             color: const Color.fromARGB(255, 12, 12, 12),
@@ -273,21 +273,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 const SizedBox(height: 20),
 
-                                DropdownField(
-                                  dropdownValues: const ["Male", "Female"],
-                                  hintText: "Gender",
+                                DropdownButtonFormField<String>(
+                                  decoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors
+                                              .white), // Set the border color to white
+                                      borderRadius: BorderRadius.circular(
+                                          4), // Optional: Set border radius for a rounded border
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors
+                                              .white), // Set the focused border color to white
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    hintStyle: TextStyle(
+                                        color: Colors
+                                            .white), // Set the hint text color to white
+                                  ),
+                                  value: _genderController.text,
+                                  items: ["Male", "Female"]
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Container(
+                                        color: value == _genderController.text
+                                            ? Colors.black
+                                            : null, // Set background color to black for selected item
+                                        child: Text(
+                                          value,
+                                          style: TextStyle(
+                                            color: value ==
+                                                    _genderController.text
+                                                ? Colors.white
+                                                : Colors
+                                                    .black, // Set text color to white for selected item
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  hint: Text(
+                                    "Gender",
+                                    style: TextStyle(
+                                        color: Colors
+                                            .white), // Set the hint text color to white
+                                  ),
                                   onChanged: (value) {
-                                    _genderController.text = value;
+                                    _genderController.text = value!;
                                   },
-                                  controller: _genderController,
                                 ),
+
                                 const SizedBox(height: 20),
                                 textField(
                                     "Weight", false, _weightController, true),
                                 const SizedBox(height: 20),
                                 textField(
                                     "Height", false, _heightController, true),
-                                const SizedBox(height: 20),
+                                const SizedBox(height: 10),
                                 textField("BMI", false, _bmiController, true),
                               ],
                             ),
