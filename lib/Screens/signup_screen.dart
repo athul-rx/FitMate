@@ -221,7 +221,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child:  Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
+                  children:const [
                     Icon(Icons.check_circle, size: 48.0, color: Colors.green),
                     SizedBox(height: 16.0),
                     Text(
