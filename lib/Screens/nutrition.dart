@@ -68,27 +68,21 @@ class _MyNutritionState extends State<MyNutrition> {
     log("$foodItems  ${foodItems.length}food item in MyTable");
     // log("foodItems.foodName.toString() ${foodItems[0]} food item in MyTable");
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 21, 21, 21),
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            color: Colors.white,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          actions: [
-            Image.asset(
+        appBar:  AppBar(
+        backgroundColor: const Color.fromARGB(255, 21, 21, 21),
+            elevation: 2,
+            leadingWidth: 50,
+            actions: [
+              Image.asset(
               'assets/images/logo1.png',
               width: 50,
               height: 50,
-            )
-          ],
-        ),
+            ),
+            ]
+      ),
         body: FutureBuilder(
             future: Future.delayed(
-                const Duration(seconds: 5)), // Delay of 5 seconds
+                const Duration(seconds: 3)), // Delay of 5 seconds
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // Show a loading indicator while waiting for the delay to complete

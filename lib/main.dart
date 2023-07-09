@@ -8,6 +8,7 @@ import 'package:fitmate/Screens/home_screen.dart';
 import 'package:fitmate/Screens/login_screen.dart';
 import 'package:fitmate/Screens/nutrition.dart';
 import 'package:fitmate/Screens/pose_detector_view.dart';
+import 'package:fitmate/Screens/root.dart';
 import 'package:fitmate/Screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -42,7 +43,7 @@ class _MyAppState extends State<MyApp> {
       } else {
         log(user.uid);
         setState(() {
-          _defaultHome = Dashboard();
+          _defaultHome = RootPage();
         });
       }
     });
@@ -70,7 +71,7 @@ class _MyAppState extends State<MyApp> {
                 fontWeight: FontWeight.normal,
                 color: Colors.white),
           )),
-      home: const LoginScreen(),
+      home: RootPage(),
     );
   }
 }
