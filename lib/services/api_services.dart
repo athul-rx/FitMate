@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:fitmate/Models/bimetric_response.dart';
 import 'package:fitmate/Models/calories_response.dart';
 import 'package:fitmate/Models/food_request.dart';
 import 'package:fitmate/Models/food_response.dart';
@@ -73,8 +74,9 @@ class APIServices {
 
   //get added food from user
 
-Future<FoodResponseModel> fetchFoodData() async {
-  final url = Uri.parse('https://fitmate-api-r2ic.onrender.com/user/data/food/details/read/1');
+  Future<FoodResponseModel> fetchFoodData() async {
+    final url = Uri.parse(
+        'https://fitmate-api-r2ic.onrender.com/user/data/food/details/read/1');
 
     final response = await http.post(url);
     if (response.statusCode == 200) {
@@ -91,7 +93,7 @@ Future<FoodResponseModel> fetchFoodData() async {
   Future<bool> RegisterUser(String name, String email, String password) async {
     log(url.toString() + 'user/auth/signup');
 
-   Map<String, String> header = {
+    Map<String, String> header = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     };
@@ -102,8 +104,10 @@ Future<FoodResponseModel> fetchFoodData() async {
       "password": password,
     });
     log(body.toString());
-    final response =
-        await http.post(Uri.parse('https://fitmate-api-r2ic.onrender.com/user/auth/signup'), body: body, headers: header);
+    final response = await http.post(
+        Uri.parse('https://fitmate-api-r2ic.onrender.com/user/auth/signup'),
+        body: body,
+        headers: header);
 
     log(response.body);
     log(response.statusCode.toString());
@@ -117,10 +121,10 @@ Future<FoodResponseModel> fetchFoodData() async {
   }
 
   //add personal data
-  Future<bool> AddPersonalData(String age, String height, String weight ) async {
+  Future<bool> AddPersonalData(String age, String height, String weight) async {
     log(url.toString() + 'user/auth/signup');
 
-   Map<String, String> header = {
+    Map<String, String> header = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     };
@@ -131,8 +135,11 @@ Future<FoodResponseModel> fetchFoodData() async {
       "weight": weight,
     });
     log(body.toString());
-    final response =
-        await http.post(Uri.parse('https://fitmate-api-r2ic.onrender.com/user/data/biometrix/add/${1}'), body: body, headers: header);
+    final response = await http.post(
+        Uri.parse(
+            'https://fitmate-api-r2ic.onrender.com/user/data/biometrix/add/${5}'),
+        body: body,
+        headers: header);
 
     log(response.body);
     log(response.statusCode.toString());
@@ -156,8 +163,10 @@ Future<FoodResponseModel> fetchFoodData() async {
       "password": password,
     });
     log(body.toString());
-    final response =
-        await http.post(Uri.parse('https://fitmate-api-r2ic.onrender.com/user/auth/signin'), body: body, headers: header);
+    final response = await http.post(
+        Uri.parse('https://fitmate-api-r2ic.onrender.com/user/auth/signin'),
+        body: body,
+        headers: header);
 
     log(response.body);
     log(response.statusCode.toString());
@@ -168,8 +177,6 @@ Future<FoodResponseModel> fetchFoodData() async {
     final decodedToken = JwtDecoder.decode(jwtToken);
     LoginResponse loginResponse = LoginResponse.fromJson(decodedToken);
 
-    
-
     if (response.statusCode == 200) {
       log(response.body);
       return loginResponse;
@@ -178,5 +185,22 @@ Future<FoodResponseModel> fetchFoodData() async {
     }
   }
 
+  //get personal data
+    //get added food from user
 
+  Future<BiometricResponse> fetchUserBiometric() async {
+    final url = Uri.parse(
+        'https://fitmate-api-r2ic.onrender.com/user/data/biometrix/read/5');
+
+    final response = await http.post(url);
+    if (response.statusCode == 200) {
+      final jsonBody = json.decode(response.body);
+
+      // Parse the JSON response into FoodResponseModel
+      final biometric = BiometricResponse.fromJson(jsonBody);
+      return biometric;
+    } else {
+      throw Exception('Failed to fetch food data');
+    }
+  }
 }

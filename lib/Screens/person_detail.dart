@@ -2,13 +2,13 @@
 
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitmate/Components/button.dart';
 import 'package:fitmate/Screens/dashboard.dart';
-import 'package:fitmate/Screens/home_screen.dart';
+// import 'package:fitmate/Screens/home_screen.dart';
 import 'package:fitmate/services/api_services.dart';
-import 'package:fitmate/services/shared_Preference.dart';
+// import 'package:fitmate/services/shared_Preference.dart';
 import 'package:fitmate/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

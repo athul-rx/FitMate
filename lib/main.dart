@@ -70,8 +70,7 @@ class _MyAppState extends State<MyApp> {
                 fontWeight: FontWeight.normal,
                 color: Colors.white),
           )),
-      home: const LoginScreen(),
+      home: const HomeScreen(),
     );
   }
 }
-
